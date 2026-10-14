@@ -5,17 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Visual Learning Platform for Deaf Students — Class 5 EVS Science. Learn through pictures, animations, and sign language.">
   <title>🌱 Learn with Eyes — Class 5 Science</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
   <!-- ==================== HEADER ==================== -->
   <header class="header" id="header">
-    <div class="header__logo">
+    <div class="header__logo" id="headerLogo" role="button" tabindex="0" title="Back to Home">
       <span class="header__logo-icon">🌱</span>
       <span>Learn with Eyes</span>
     </div>
     <nav class="header__nav">
+      <button class="header__ctrl-btn" id="fontSizeBtn" title="Change text size (Normal / Large / Extra Large)" aria-label="Toggle text size">
+        <span id="fontSizeLabel">A⁺</span>
+      </button>
+      <button class="header__ctrl-btn" id="themeToggleBtn" title="Toggle High Contrast / Dark Mode" aria-label="Toggle theme">
+        <span id="themeToggleIcon">🌙</span>
+      </button>
       <button class="header__menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
     </nav>
   </header>
@@ -34,22 +41,22 @@
       <span class="sidebar__link-text">1. Growing Plants</span>
       <span class="sidebar__progress">●</span>
     </a>
-    <a href="#" class="sidebar__link" data-page="ch2" id="nav-ch2">
+    <a href="#" class="sidebar__link chapter-preview-link" data-chapter="ch2" id="nav-ch2">
       <span class="sidebar__link-icon">🍎</span>
       <span class="sidebar__link-text">2. Food and Health</span>
       <span class="sidebar__progress">🔒</span>
     </a>
-    <a href="#" class="sidebar__link" data-page="ch3" id="nav-ch3">
+    <a href="#" class="sidebar__link chapter-preview-link" data-chapter="ch3" id="nav-ch3">
       <span class="sidebar__link-icon">🦁</span>
       <span class="sidebar__link-text">3. Life of Animals</span>
       <span class="sidebar__progress">🔒</span>
     </a>
-    <a href="#" class="sidebar__link" data-page="ch4" id="nav-ch4">
+    <a href="#" class="sidebar__link chapter-preview-link" data-chapter="ch4" id="nav-ch4">
       <span class="sidebar__link-icon">🦴</span>
       <span class="sidebar__link-text">4. Skeletal & Muscular</span>
       <span class="sidebar__progress">🔒</span>
     </a>
-    <a href="#" class="sidebar__link" data-page="ch5" id="nav-ch5">
+    <a href="#" class="sidebar__link chapter-preview-link" data-chapter="ch5" id="nav-ch5">
       <span class="sidebar__link-icon">🧠</span>
       <span class="sidebar__link-text">5. Nervous System</span>
       <span class="sidebar__progress">🔒</span>
@@ -119,32 +126,36 @@
           </div>
         </div>
 
-        <div class="unit-card" style="opacity: 0.5; cursor: not-allowed;">
+        <div class="unit-card chapter-preview-card" data-chapter="ch2" id="unit-card-2" style="cursor: pointer;">
           <span class="unit-card__icon">🍎</span>
           <div class="unit-card__number">Chapter 2</div>
           <div class="unit-card__title">Food and Health</div>
-          <div class="unit-card__chapters">Coming soon...</div>
+          <div class="unit-card__chapters">Nutrients, balanced diet, deficiency diseases, hygiene</div>
+          <span class="unit-card__badge" style="background: rgba(0,0,0,0.06); color: var(--text-secondary); margin-top: 12px;">Coming Soon • Tap Preview</span>
         </div>
 
-        <div class="unit-card" style="opacity: 0.5; cursor: not-allowed;">
+        <div class="unit-card chapter-preview-card" data-chapter="ch3" id="unit-card-3" style="cursor: pointer;">
           <span class="unit-card__icon">🦁</span>
           <div class="unit-card__number">Chapter 3</div>
           <div class="unit-card__title">Life of Animals</div>
-          <div class="unit-card__chapters">Coming soon...</div>
+          <div class="unit-card__chapters">Habitats, breathing in animals, feeding habits, migration</div>
+          <span class="unit-card__badge" style="background: rgba(0,0,0,0.06); color: var(--text-secondary); margin-top: 12px;">Coming Soon • Tap Preview</span>
         </div>
 
-        <div class="unit-card" style="opacity: 0.5; cursor: not-allowed;">
+        <div class="unit-card chapter-preview-card" data-chapter="ch4" id="unit-card-4" style="cursor: pointer;">
           <span class="unit-card__icon">🦴</span>
           <div class="unit-card__number">Chapter 4</div>
           <div class="unit-card__title">Skeletal & Muscular System</div>
-          <div class="unit-card__chapters">Coming soon...</div>
+          <div class="unit-card__chapters">Bones, joints, muscles, movement, posture</div>
+          <span class="unit-card__badge" style="background: rgba(0,0,0,0.06); color: var(--text-secondary); margin-top: 12px;">Coming Soon • Tap Preview</span>
         </div>
 
-        <div class="unit-card" style="opacity: 0.5; cursor: not-allowed;">
+        <div class="unit-card chapter-preview-card" data-chapter="ch5" id="unit-card-5" style="cursor: pointer;">
           <span class="unit-card__icon">🧠</span>
           <div class="unit-card__number">Chapter 5</div>
           <div class="unit-card__title">Nervous System</div>
-          <div class="unit-card__chapters">Coming soon...</div>
+          <div class="unit-card__chapters">Brain, spinal cord, nerves, sense organs: eyes, ears, skin</div>
+          <span class="unit-card__badge" style="background: rgba(0,0,0,0.06); color: var(--text-secondary); margin-top: 12px;">Coming Soon • Tap Preview</span>
         </div>
       </div>
     </div>
@@ -685,30 +696,63 @@
             <div class="lesson-card__icon">🎯</div>
             <div>
               <div class="lesson-card__title">Match the Seed to its Travel Method!</div>
-              <div class="lesson-card__subtitle">Click to match each seed with how it disperses</div>
+              <div class="lesson-card__subtitle">Tap or drag each seed to its travel method! Tap a seed, then tap a method, or drag & drop.</div>
             </div>
           </div>
           <div class="lesson-card__body">
             <div id="matchGame" class="match-game">
+              <div class="match-status-bar">
+                <div class="match-score">Matched: <span id="matchScoreCount">0</span> of 6 seeds</div>
+                <button class="btn btn--secondary" id="resetMatchBtn" style="padding: 6px 14px; min-height: 38px; font-size: 0.85rem;">🔄 Reset Activity</button>
+              </div>
+
+              <div class="match-celebration" id="matchCelebration" style="display: none;">
+                🎉 <strong>Brilliant!</strong> You matched all seeds to their correct dispersal methods! ⭐⭐⭐
+              </div>
+
               <div class="comparison-grid" style="grid-template-columns: 1fr 1fr;">
                 <div>
-                  <p style="font-weight:800; margin-bottom:12px; text-align:center;">🌰 Seeds</p>
+                  <p style="font-weight:800; margin-bottom:12px; text-align:center;">🌰 Seeds (Tap or Drag)</p>
                   <div class="drag-container" id="seedBank">
                     <div class="drag-item" draggable="true" data-match="wind" id="drag-dandelion">🌼 Dandelion</div>
                     <div class="drag-item" draggable="true" data-match="water" id="drag-coconut">🥥 Coconut</div>
                     <div class="drag-item" draggable="true" data-match="animal" id="drag-mango">🥭 Mango</div>
-                    <div class="drag-item" draggable="true" data-match="burst" id="drag-pea">🫛 Pea</div>
-                    <div class="drag-item" draggable="true" data-match="wind" id="drag-maple">🍁 Maple</div>
-                    <div class="drag-item" draggable="true" data-match="water" id="drag-lotus">🪷 Lotus</div>
+                    <div class="drag-item" draggable="true" data-match="burst" id="drag-pea">🫛 Pea Pod</div>
+                    <div class="drag-item" draggable="true" data-match="wind" id="drag-maple">🍁 Maple Seed</div>
+                    <div class="drag-item" draggable="true" data-match="water" id="drag-lotus">🪷 Lotus Pod</div>
                   </div>
                 </div>
                 <div>
-                  <p style="font-weight:800; margin-bottom:12px; text-align:center;">🎯 Methods</p>
-                  <div style="display: flex; flex-direction: column; gap: 8px;">
-                    <div class="drop-zone" data-accept="wind" id="drop-wind">🌬️ Wind</div>
-                    <div class="drop-zone" data-accept="water" id="drop-water">🌊 Water</div>
-                    <div class="drop-zone" data-accept="animal" id="drop-animal">🐦 Animal</div>
-                    <div class="drop-zone" data-accept="burst" id="drop-burst">💥 Bursting</div>
+                  <p style="font-weight:800; margin-bottom:12px; text-align:center;">🎯 Dispersal Methods</p>
+                  <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <div class="drop-zone" data-accept="wind" id="drop-wind">
+                      <div class="drop-zone__header">
+                        <span>🌬️ Wind Dispersal</span>
+                        <span class="drop-zone__count" id="count-wind">0/2</span>
+                      </div>
+                      <div class="drop-zone__items"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="water" id="drop-water">
+                      <div class="drop-zone__header">
+                        <span>🌊 Water Dispersal</span>
+                        <span class="drop-zone__count" id="count-water">0/2</span>
+                      </div>
+                      <div class="drop-zone__items"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="animal" id="drop-animal">
+                      <div class="drop-zone__header">
+                        <span>🐦 Animal Dispersal</span>
+                        <span class="drop-zone__count" id="count-animal">0/1</span>
+                      </div>
+                      <div class="drop-zone__items"></div>
+                    </div>
+                    <div class="drop-zone" data-accept="burst" id="drop-burst">
+                      <div class="drop-zone__header">
+                        <span>💥 Bursting Open</span>
+                        <span class="drop-zone__count" id="count-burst">0/1</span>
+                      </div>
+                      <div class="drop-zone__items"></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -749,6 +793,7 @@
               </div>
             </div>
             <div class="quiz-feedback" id="q1-feedback"></div>
+            <div class="quiz-explanation" id="q1-expl">💡 <strong>Why:</strong> Fruits protect seeds inside them. When animals eat fruits or fruits drop, seeds grow into new plants!</div>
           </div>
 
           <!-- Q2 -->
@@ -770,6 +815,7 @@
               </div>
             </div>
             <div class="quiz-feedback" id="q2-feedback"></div>
+            <div class="quiz-explanation" id="q2-expl">💡 <strong>Why:</strong> Germination is the biological process where a seed absorbs water and sprouts into a seedling.</div>
           </div>
 
           <!-- Q3 -->
@@ -778,7 +824,7 @@
             <div class="quiz-question__text">Which of the following seeds is dispersed by water? 🌊</div>
             <div class="quiz-options">
               <div class="quiz-option" data-correct="false" data-q="q3" id="q3-a">
-                <span class="quiz-option__letter">A</span> Xanthium
+                <span class="quiz-option__letter">A</span> Xanthium (Cocklebur) 🪝
               </div>
               <div class="quiz-option" data-correct="true" data-q="q3" id="q3-b">
                 <span class="quiz-option__letter">B</span> Coconut 🥥
@@ -791,6 +837,7 @@
               </div>
             </div>
             <div class="quiz-feedback" id="q3-feedback"></div>
+            <div class="quiz-explanation" id="q3-expl">💡 <strong>Why:</strong> Coconuts have a thick, fibrous outer layer filled with air that allows them to float long distances on water!</div>
           </div>
 
           <!-- Q4 -->
@@ -812,6 +859,7 @@
               </div>
             </div>
             <div class="quiz-feedback" id="q4-feedback"></div>
+            <div class="quiz-explanation" id="q4-expl">💡 <strong>Why:</strong> Kharif crops like rice, jowar, bajra, and maize grow in the monsoon/summer season (June-October).</div>
           </div>
 
           <!-- Q5 -->
@@ -826,13 +874,14 @@
                 <span class="quiz-option__letter">B</span> Flowers 🌸
               </div>
               <div class="quiz-option" data-correct="false" data-q="q5" id="q5-c">
-                <span class="quiz-option__letter">C</span> Root 🌳
+                <span class="quiz-option__letter">C</span> Stem 🎋
               </div>
               <div class="quiz-option" data-correct="true" data-q="q5" id="q5-d">
-                <span class="quiz-option__letter">D</span> Soil 🏔️
+                <span class="quiz-option__letter">D</span> Soil 🪨🌱
               </div>
             </div>
             <div class="quiz-feedback" id="q5-feedback"></div>
+            <div class="quiz-explanation" id="q5-expl">💡 <strong>Why:</strong> Roots anchor into the soil and draw water and dissolved nutrients up through the stem to nourish the plant.</div>
           </div>
 
           <!-- Q6: True / False -->
@@ -848,6 +897,7 @@
               </div>
             </div>
             <div class="quiz-feedback" id="q6-feedback"></div>
+            <div class="quiz-explanation" id="q6-expl">💡 <strong>Why:</strong> True! Plants growing from stem cuttings, tubers, or leaves skip flowering and seed formation, growing much faster.</div>
           </div>
 
           <!-- Q7 -->
@@ -869,6 +919,7 @@
               </div>
             </div>
             <div class="quiz-feedback" id="q7-feedback"></div>
+            <div class="quiz-explanation" id="q7-expl">💡 <strong>Why:</strong> Potato tubers have small depressions called "eyes" which are vegetative buds that sprout into new potato plants!</div>
           </div>
         </div>
 
@@ -891,6 +942,82 @@
     </div><!-- end page-ch1 -->
 
   </main>
+
+  <!-- ==================== ACCESSIBLE ISL MODAL ==================== -->
+  <div class="modal-overlay" id="islModal" role="dialog" aria-modal="true" aria-labelledby="islModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-title-emoji" id="islModalEmoji">🌱</span>
+          <h2 class="modal-title" id="islModalTitle">Seed</h2>
+        </div>
+        <button class="modal-close-btn" id="closeIslModal" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="isl-demo-box">
+          <div class="isl-demo-graphic" id="islModalGraphic">🌰</div>
+          <div class="isl-handshape-title" id="islModalGesture">Pinch & Sow Sign Gesture</div>
+        </div>
+        <div class="isl-step-card">
+          <div class="isl-step-num">1</div>
+          <div class="isl-step-text" id="islModalStep1">Hold thumb and index finger close together to show the tiny size of a seed.</div>
+        </div>
+        <div class="isl-step-card">
+          <div class="isl-step-num">2</div>
+          <div class="isl-step-text" id="islModalStep2">Move hand downward towards the ground as if planting the seed in fertile soil.</div>
+        </div>
+        <div class="callout callout--tip" style="margin: 0;">
+          <span class="callout__icon">💡</span>
+          <span class="callout__text" id="islModalMeaning"><strong>Scientific Meaning:</strong> A fertilized ovule containing a plant embryo and food store that can grow into a new plant.</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn--secondary btn--sm" id="islPrevBtn" style="padding: 6px 14px; min-height: 38px;">⬅ Previous Sign</button>
+        <span class="isl-counter" id="islCounter">1 / 12</span>
+        <button class="btn btn--secondary btn--sm" id="islNextBtn" style="padding: 6px 14px; min-height: 38px;">Next Sign ➡</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CHAPTER PREVIEW MODAL ==================== -->
+  <div class="modal-overlay" id="chapterModal" role="dialog" aria-modal="true" aria-labelledby="chModalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-title-emoji" id="chModalEmoji">🍎</span>
+          <h2 class="modal-title" id="chModalTitle">Chapter 2: Food and Health</h2>
+        </div>
+        <button class="modal-close-btn" id="closeChModal" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="callout callout--info">
+          <span class="callout__icon">📖</span>
+          <span class="callout__text" id="chModalDesc">Coming soon to the platform! This chapter explores how nutrition and hygiene keep our bodies strong.</span>
+        </div>
+        <h4 style="font-weight: 800; margin-top: 4px;">Topics covered in this unit:</h4>
+        <ul id="chModalTopics" style="padding-left: 20px; line-height: 2; font-size: 0.95rem;">
+          <li>🍎 Carbohydrates, Fats & Proteins</li>
+          <li>🥗 Vitamins & Minerals</li>
+          <li>🥛 Water, Roughage & Balanced Diet</li>
+          <li>🦠 Deficiency Diseases & Hygiene</li>
+        </ul>
+      </div>
+      <div class="modal-footer" style="justify-content: flex-end;">
+        <button class="btn btn--primary btn--sm" id="closeChModalBtn" style="padding: 6px 20px; min-height: 38px;">Got it! 👍</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti Container -->
+  <div class="confetti-container" id="confettiContainer"></div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="footer__content">
+      <p>🌱 <strong>Learn with Eyes</strong> — Visual Learning Platform for Deaf Students</p>
+      <p class="footer__sub">Designed for Anushruti Academy for the Deaf (IIT Roorkee) • Class 5 Science (EVS) Curriculum</p>
+    </div>
+  </footer>
 
   <script src="app.js"></script>
 </body>

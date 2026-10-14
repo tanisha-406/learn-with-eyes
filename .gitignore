@@ -1,0 +1,12 @@
+# Dependencies and OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archives & Temporary files
+*.zip
+*.tar.gz
+*.rar
+*.tmp
+*.bak
+*.log
