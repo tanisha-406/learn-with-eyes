@@ -1,7 +1,8 @@
 # 🌱 Learn with Eyes — Visual Learning Platform for Deaf Students
 
 > **Empowering Deaf and Hard-of-Hearing Children Through Visual Education**  
-> Developed for **Anushruti Academy for the Deaf (IIT Roorkee)** • Class 5 EVS / Science Curriculum
+> Developed for **Anushruti Academy for the Deaf (IIT Roorkee)** • Class 5 EVS / Science Curriculum  
+> Textbook: *Innovators' Science 5* (EduRise India / NEP 2020, 120 Pages)
 
 ---
 
@@ -17,38 +18,64 @@ Standard textbooks and digital educational platforms heavily rely on auditory le
 
 ---
 
-## 🌿 Current Unit: Unit I — Living Things (Chapter 1: Growing Plants)
+## 📚 Complete Curriculum Coverage (14 Chapters & Model Test Papers)
 
-Based on the Class 5 Science curriculum (`unit 1.pdf`), this interactive module covers:
-1. **Why Plants Are Important**: Oxygen, food, timber, fibres, and medicine.
-2. **Reproduction by Seeds**: Germination stages, seed coat, embryo, and cotyledons.
-3. **Monocot vs. Dicot Seeds**: Single vs. double cotyledons with clear visual comparisons (maize, rice vs. beans, peas).
-4. **Seed Dispersal Mechanisms**:
-   - 🌬️ **Wind Dispersal** (Dandelion, Maple, Drumstick)
-   - 🌊 **Water Dispersal** (Coconut, Lotus)
-   - 🐦 **Animal Dispersal** (Mango, Xanthium cocklebur)
-   - 💥 **Bursting / Explosive Mechanism** (Peas, Balsam, Okra)
-5. **Vegetative Reproduction**: Growing from stems (rose, potato eyes), roots (sweet potato, carrot), and leaves (*Bryophyllum*).
-6. **Non-Flowering Plants**: Spore reproduction in ferns, moss, and fungi.
-7. **Agriculture & Crop Seasons**:
-   - ☀️ **Kharif Crops** (Summer: rice, jowar, bajra, maize)
-   - ❄️ **Rabi Crops** (Winter: wheat, gram, mustard, peas)
-   - 🚜 Agricultural stages: Ploughing → Sowing → Manuring → Irrigation → Harvesting
+The platform is mapped 1-to-1 with the 120-page textbook:
+
+### 🌿 Unit I — Living Things and Their Needs (Pages 5–45)
+1. **Chapter 1: Growing Plants (Page 5)** `[Interactive Module ✨]`  
+   Seeds, germination stages, monocot vs. dicot, seed dispersal mechanisms, vegetative propagation, agriculture seasons.
+2. **Chapter 2: Food and Health (Page 14)** `[Interactive Module ✨]`  
+   5 essential nutrients (carbohydrates, fats, proteins, vitamins, minerals), balanced diet, deficiency diseases (night blindness, scurvy, rickets, goitre, anaemia), hygiene and communicable disease prevention.
+3. **Chapter 3: Life of Animals (Page 23)** `[Syllabus Preview 📖]`  
+   Habitats, breathing mechanisms (gills, spiracles, skin, lungs), movement adaptations, animal migration.
+4. **Chapter 4: The Skeletal and Muscular System (Page 31)** `[Syllabus Preview 📖]`  
+   Human skeleton (206 bones, skull, backbone, ribcage), moveable joints, voluntary and involuntary muscles.
+5. **Chapter 5: Nervous System (Page 40)** `[Syllabus Preview 📖]`  
+   Brain (cerebrum, cerebellum, medulla), spinal cord reflex actions, sensory/motor nerves, 5 sense organs.
+
+### ⚡ Unit II — Materials and Energy (Pages 46–70)
+6. **Chapter 6: Solids, Liquids and Gases (Page 46)** `[Syllabus Preview 📖]`  
+   States of matter, molecular arrangements, solutions (solute, solvent), physical vs. chemical changes.
+7. **Chapter 7: Force, Energy and Simple Machines (Page 52)** `[Interactive Module ✨]`  
+   Push vs. pull, magnetic/gravitational/frictional forces, **elastic force & buoyant force (Page 54)**, scientific definition of work, forms of energy (solar, light, electrical, kinetic, potential, wind), 6 simple machines (lever, pulley, wheel & axle, inclined plane, wedge, screw).
+8. **Chapter 8: Air and Water (Page 61)** `[Syllabus Preview 📖]`  
+   Atmosphere layers, air properties, water cycle, sedimentation, decantation, filtration, chlorination.
+
+### 🌍 Unit III — Earth and Environment (Pages 71–112)
+9. **Chapter 9: Soil Erosion and Conservation (Page 71)** `[Syllabus Preview 📖]`  
+   Soil layers, erosion agents (wind, rainwater, deforestation), terrace farming, bunds, afforestation.
+10. **Chapter 10: Rocks and Minerals (Page 77)** `[Syllabus Preview 📖]`  
+    Igneous (granite, basalt), sedimentary (sandstone, limestone), metamorphic rocks, mineral ores, fossil fuel conservation.
+11. **Chapter 11: The Earth and The Solar System (Page 87)** `[Syllabus Preview 📖]`  
+    Sun, 8 planets, moon phases, solar and lunar eclipses, artificial satellites.
+12. **Chapter 12: Natural Disasters (Page 97)** `[Syllabus Preview 📖]`  
+    Earthquakes (seismograph, Richter scale), volcanoes, tsunamis, floods, droughts, survival drills.
+13. **Chapter 13: Our Environment (Page 105)** `[Syllabus Preview 📖]`  
+    Biotic & abiotic factors, food chains, air/water/soil/noise pollution, waste management & the 3Rs.
+
+### 🩹 Unit IV — Safety & Assessments (Pages 113–120)
+14. **Chapter 14: Safety Rules and First Aid (Page 113)** `[Syllabus Preview 📖]`  
+    Road, fire, and home safety; first aid for cuts, burns, fractures, and animal bites.
+- **Model Test Paper 1 (Page 119)** `[Assessment 📝]`  
+  Comprehensive mid-term revision covering Chapters 1 to 7 with OMR sheet.
+- **Model Test Paper 2 (Page 120)** `[Assessment 📊]`  
+  Final revision covering Chapters 8 to 14 with standard OMR bubble evaluation.
 
 ---
 
-## 🚀 Key Features & Architectural Improvements
+## 🚀 Key Features & Accessibility Innovations
 
 | Feature | Description |
 | :--- | :--- |
-| **🤟 Accessible ISL Modal System** | Replaced plain browser alerts with interactive modal dialogs featuring animated handshape guides, step-by-step gesture steps, and scientific definitions. |
-| **🎮 Dual-Mode Matching Game** | Works with **both** desktop HTML5 Drag-and-Drop AND **Touch/Click-to-Match** for touchscreens. Includes real-time score tracking (`0/6`), reset button, and confetti fanfare upon completion. |
-| **💡 Visual Quiz with Explanations** | 7-question interactive assessment with instant visual feedback, comprehensive "Why" explanations for each answer, star rating (🌟🌟🌟), and retry functionality. |
+| **🤟 Accessible ISL Modal System** | Interactive modal dialogs featuring animated handshape guides, step-by-step gesture steps, and scientific definitions across 24+ curriculum vocabulary signs. |
+| **🎮 Dual-Mode Matching Games** | Works with **both** desktop HTML5 Drag-and-Drop AND **Touch/Click-to-Match** for touchscreens. Includes real-time score tracking, reset buttons, and confetti fanfare. |
+| **💡 Visual Quizzes with Explanations** | Multi-chapter interactive assessments with instant visual feedback, comprehensive "Why" explanations, star ratings (🌟🌟🌟), and retry functionality. |
+| **🧭 Curriculum Filtering & Navigation** | One-click filter chips to view by unit (`All`, `Unit I`, `Unit II`, `Unit III`, `Unit IV`) or jump straight to any chapter. |
 | **🌙 Dark & High-Contrast Modes** | Full theme switcher (Light / Dark / High-Contrast) designed to minimize visual fatigue for low-vision and deaf learners. |
 | **🔤 Dynamic Text Scaling** | One-click font sizing (`Normal` → `Large` → `Extra Large`) for accessibility across varying screen distances. |
 | **💾 Progress Persistence** | Uses `localStorage` to preserve quiz completions, star rewards, theme preferences, and font scaling across browser restarts. |
-| **📱 Responsive Design** | Seamless experience across mobile smartphones, school tablets, Chromebooks, and interactive whiteboards. |
-| **⚡ 100% Offline Capable** | Built with pure HTML5, CSS3, and Vanilla JavaScript with no heavy npm dependencies, ensuring instant offline classroom usability. |
+| **📱 100% Offline Capable** | Built with pure HTML5, CSS3, and Vanilla JavaScript with no heavy npm dependencies, ensuring instant offline classroom usability. |
 
 ---
 
@@ -57,16 +84,18 @@ Based on the Class 5 Science curriculum (`unit 1.pdf`), this interactive module 
 ```
 ├── index.html          # Main accessible visual learning web application
 ├── styles.css          # Design system, CSS tokens, dark/contrast modes, responsive layout
-├── app.js              # Interactive logic (ISL modal, touch matching, quiz, accessibility)
+├── app.js              # Interactive logic (multi-chapter routing, ISL, touch matching, quizzes)
 ├── images/             # Visual illustrations and educational diagrams
 │   ├── plant_hero.png
+│   ├── food_hero.png
+│   ├── force_hero.png
+│   ├── nutrients_guide.png
+│   ├── simple_machines.png
 │   ├── seed_germination.png
 │   ├── seed_dispersal.png
 │   ├── dicot_monocot.png
 │   ├── vegetative_reproduction.png
 │   └── agriculture_stages.png
-├── unit1_pages/        # Scanned reference pages from textbook
-├── unit 1.pdf          # Full Class 5 textbook unit
 └── README.md           # Project documentation and guide
 ```
 
@@ -85,26 +114,6 @@ Using Python:
 python -m http.server 3000
 ```
 Then open: [http://localhost:3000](http://localhost:3000)
-
----
-
-## 🗺️ Future Roadmap
-
-- [ ] **Chapter 2 (Food & Health)**: Interactive balanced-diet plate builder and vitamin deficiency visual charts.
-- [ ] **Chapter 3 (Life of Animals)**: Animal habitat mapping and breathing mechanism animations.
-- [ ] **Chapter 4 (Skeletal & Muscular System)**: 3D rotatable skeleton and interactive joint simulator.
-- [ ] **ISL Video Repository**: Embedded recorded sign demonstrations by certified ISL instructors from IIT Roorkee.
-
----
-
-## 🤝 Contributing
-
-Contributions to enhance accessibility, add Indian Sign Language assets, or expand textbook chapters are warmly welcomed!
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/NewChapter`)
-3. Commit your changes (`git commit -m 'Add interactive food pyramid for Chapter 2'`)
-4. Push to the branch (`git push origin feature/NewChapter`)
-5. Open a Pull Request
 
 ---
 
