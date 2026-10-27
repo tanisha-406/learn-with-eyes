@@ -14,10 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initMatchingGame();
   initCh2MatchingGame();
   initCh7MatchingGame();
+  initUniversalMatching();
   initInteractiveFlashcards();
   initQuiz();
   initCh2Quiz();
   initCh7Quiz();
+  initUniversalQuizzes();
+  initOMRSheets();
   restoreSavedProgress();
 });
 
@@ -206,7 +209,10 @@ function initTabs() {
     tabs.forEach(tab => {
       tab.addEventListener('click', () => {
         tabs.forEach(t => t.classList.remove('active'));
-        sections.forEach(s => s.classList.remove('active'));
+        sections.forEach(s => {
+          s.classList.remove('active');
+          s.style.display = 'none';
+        });
 
         tab.classList.add('active');
 
@@ -215,6 +221,7 @@ function initTabs() {
                               document.getElementById(`section-${sectionId}`);
         if (targetSection) {
           targetSection.classList.add('active');
+          targetSection.style.display = 'block';
 
           const animatedElements = targetSection.querySelectorAll('.fade-in');
           animatedElements.forEach(el => {
@@ -504,7 +511,479 @@ const ISL_DATA = [
     step1: 'Bend fingers of both hands into curved claws, palms facing you.',
     step2: 'Interlock fingers like cogwheel gear teeth and rotate wrists up and down.',
     meaning: 'Any device (lever, pulley, ramp) that makes work easier, faster, and safer.'
+  },
+  // Chapter 3: Life of Animals
+  {
+    id: 'ch3_animal',
+    word: 'Animal',
+    emoji: '🦁',
+    graphic: '🐾🦁',
+    gestureName: 'Walking Animal Paws',
+    step1: 'Curve both hands like animal paws in front of body.',
+    step2: 'Step hands forward alternately to demonstrate an animal walking.',
+    meaning: 'Living multicellular creature that feeds on organic matter and moves independently.'
+  },
+  {
+    id: 'ch3_habitat',
+    word: 'Habitat',
+    emoji: '🏡',
+    graphic: '🌿🏡',
+    gestureName: 'Roof Over Head',
+    step1: 'Place fingertips together above chest forming a protective roof shape.',
+    step2: 'Spread open palms outwards to embrace the surrounding living environment.',
+    meaning: 'The natural home or environment of an animal, plant, or other organism.'
+  },
+  {
+    id: 'ch3_gills',
+    word: 'Gills',
+    emoji: '🐟',
+    graphic: '🐟💨',
+    gestureName: 'Fluttering Fingers on Cheeks',
+    step1: 'Place fingertips of both hands on sides of your neck or cheeks.',
+    step2: 'Flutter fingers outward and inward to represent gills opening and closing under water.',
+    meaning: 'Respiratory organs found in aquatic animals that extract dissolved oxygen from water.'
+  },
+  {
+    id: 'ch3_spiracles',
+    word: 'Spiracles',
+    emoji: '🦗',
+    graphic: '🦗🕳️',
+    gestureName: 'Pinching Tiny Holes',
+    step1: 'Point index fingers towards both sides of your ribs or waist.',
+    step2: 'Make small pulsing circles to signify microscopic breathing pore holes on insect bodies.',
+    meaning: 'External respiratory openings on the body of insects that lead to tracheal breathing tubes.'
+  },
+  {
+    id: 'ch3_migration',
+    word: 'Migration',
+    emoji: '✈️',
+    graphic: '🕊️➡️',
+    gestureName: 'Sweeping Flock Flight',
+    step1: 'Cross thumbs and spread fingers wide to form bird wings.',
+    step2: 'Flap wings smoothly while moving both hands across the horizon from left to right.',
+    meaning: 'The seasonal movement of animals from one region to another for food, climate, or breeding.'
+  },
+
+  // Chapter 4: Skeletal and Muscular System
+  {
+    id: 'ch4_bone',
+    word: 'Bone',
+    emoji: '🦴',
+    graphic: '🦴✨',
+    gestureName: 'Knuckle Tap on Chin',
+    step1: 'Make a fist and tap your index finger knuckle twice on your chin bone.',
+    step2: 'Hold your arm rigid to demonstrate hardness and solid strength of bone.',
+    meaning: 'Rigid calcified organ forming the supporting skeleton framework of the body.'
+  },
+  {
+    id: 'ch4_muscle',
+    word: 'Muscle',
+    emoji: '💪',
+    graphic: '💪🔥',
+    gestureName: 'Bicep Flex & Touch',
+    step1: 'Flex right forearm to raise bicep muscle firmly.',
+    step2: 'Tap bicep with left palm to highlight contracting muscle tissue.',
+    meaning: 'Band of fibrous tissue in a human body that contracts to produce motion.'
+  },
+  {
+    id: 'ch4_skeleton',
+    word: 'Skeleton',
+    emoji: '💀',
+    graphic: '💀🦴',
+    gestureName: 'Tracing Body Framework',
+    step1: 'Cross arms over chest with spread fingers like ribcage bars.',
+    step2: 'Trace fingers down ribs to show the entire 206-bone structure.',
+    meaning: 'The internal framework of 206 bones supporting the human body.'
+  },
+  {
+    id: 'ch4_joint',
+    word: 'Joint',
+    emoji: '🤝',
+    graphic: '🔄🤝',
+    gestureName: 'Swiveling Fist in Palm',
+    step1: 'Make right hand into a ball fist.',
+    step2: 'Cup left palm around right fist and swivel it smoothly to show a ball and socket joint.',
+    meaning: 'A structure in the body by which two bones are fitted together to allow motion.'
+  },
+
+  // Chapter 5: Nervous System
+  {
+    id: 'ch5_brain',
+    word: 'Brain',
+    emoji: '🧠',
+    graphic: '🧠💭',
+    gestureName: 'Index Tapping Temple',
+    step1: 'Touch index finger tip to the temple of your forehead.',
+    step2: 'Tap gently twice to signify thoughts, intelligence, and neural cognition.',
+    meaning: 'Organ of soft nervous tissue in the skull functioning as the coordinating center.'
+  },
+  {
+    id: 'ch5_nerve',
+    word: 'Nerve / Message',
+    emoji: '⚡',
+    graphic: '⚡🔌',
+    gestureName: 'Pulsing Wire Fingers',
+    step1: 'Hold index fingers of both hands touching at fingertips.',
+    step2: 'Pull them apart with quick zig-zag vibration like electricity along a wire.',
+    meaning: 'Fiber bundle transmitting electrical impulses of sensation to the brain.'
+  },
+  {
+    id: 'ch5_think',
+    word: 'Think',
+    emoji: '💭',
+    graphic: '🤔💡',
+    gestureName: 'Circular Thought Gesture',
+    step1: 'Place index finger on forehead.',
+    step2: 'Rotate finger in small thoughtful circle to denote thinking and problem solving.',
+    meaning: 'Directing one\'s mind toward solving a problem; using intellect.'
+  },
+  {
+    id: 'ch5_reflex',
+    word: 'Reflex Action',
+    emoji: '⚡',
+    graphic: '🔥🖐️➡️',
+    gestureName: 'Instant Recoil Hand',
+    step1: 'Reach hand forward flat as if touching something hot.',
+    step2: 'Yank hand back violently to chest in sudden self-protective reflex.',
+    meaning: 'An involuntary and nearly instantaneous movement in response to a stimulus.'
+  },
+
+  // Chapter 6: Solids, Liquids & Gases
+  {
+    id: 'ch6_solid',
+    word: 'Solid',
+    emoji: '🧊',
+    graphic: '🧊🧱',
+    gestureName: 'Tight Clenched Fist',
+    step1: 'Clench both hands into firm, rigid fists.',
+    step2: 'Knock them together firmly to demonstrate non-deformable fixed solid shape.',
+    meaning: 'State of matter with tightly packed molecules having definite shape and volume.'
+  },
+  {
+    id: 'ch6_liquid',
+    word: 'Liquid',
+    emoji: '💧',
+    graphic: '🥛💧',
+    gestureName: 'Flowing Ripple Fingers',
+    step1: 'Hold both open hands palms down at waist level.',
+    step2: 'Ripple fingers gently like flowing liquid water taking container shape.',
+    meaning: 'State of matter with loosely packed molecules having fixed volume but no fixed shape.'
+  },
+  {
+    id: 'ch6_gas',
+    word: 'Gas',
+    emoji: '💨',
+    graphic: '💨🎈',
+    gestureName: 'Dispersing Palms Outward',
+    step1: 'Hold fingertips together in front of mouth.',
+    step2: 'Blow gently and burst fingers apart in all directions like free gas molecules.',
+    meaning: 'State of matter with widely spaced molecules moving freely with neither fixed shape nor volume.'
+  },
+  {
+    id: 'ch6_dissolve',
+    word: 'Dissolve / Solution',
+    emoji: '🥄',
+    graphic: '🥄🧂💧',
+    gestureName: 'Stirring Spoon Motion',
+    step1: 'Cup left hand like a glass of water.',
+    step2: 'Swirl right index finger inside cup like stirring sugar until it dissolves completely.',
+    meaning: 'When a solid solute completely mixes into a liquid solvent to form a uniform solution.'
+  },
+
+  // Chapter 8: Air and Water
+  {
+    id: 'ch8_air',
+    word: 'Air',
+    emoji: '💨',
+    graphic: '💨🌬️',
+    gestureName: 'Fanning Face Gently',
+    step1: 'Hold open flat palm in front of face.',
+    step2: 'Wave hand gently towards face to feel the cool invisible air breeze.',
+    meaning: 'Invisible mixture of nitrogen, oxygen, and other gases surrounding Earth.'
+  },
+  {
+    id: 'ch8_water',
+    word: 'Water',
+    emoji: '💧',
+    graphic: '💧🚰',
+    gestureName: 'W-Hand at Chin',
+    step1: 'Form letter W with 3 middle fingers of right hand.',
+    step2: 'Tap the index finger against your chin twice.',
+    meaning: 'Clear colourless odourless liquid essential for all living organisms.'
+  },
+  {
+    id: 'ch8_atmosphere',
+    word: 'Atmosphere',
+    emoji: '☁️',
+    graphic: '🌍☁️',
+    gestureName: 'Dome Blanket Over Globe',
+    step1: 'Cup both curved hands high above head.',
+    step2: 'Sweep hands downward in a wide spherical dome embracing the Earth.',
+    meaning: 'The envelope of gases surrounding the earth or another planet.'
+  },
+  {
+    id: 'ch8_filter',
+    word: 'Filter / Purification',
+    emoji: '☕',
+    graphic: '🧪☕💧',
+    gestureName: 'Pouring Through Cone',
+    step1: 'Shape left hand into a funnel cone.',
+    step2: 'Tilt right hand as if pouring liquid, while lower fingertips drop clean droplets.',
+    meaning: 'Process of passing liquid through a porous membrane to separate insoluble dirt.'
+  },
+
+  // Chapter 9: Soil Erosion & Conservation
+  {
+    id: 'ch9_soil',
+    word: 'Soil',
+    emoji: '🌱',
+    graphic: '🪨🌱',
+    gestureName: 'Fingertip Dirt Rubbing',
+    step1: 'Rub thumb and fingertips together near ground level.',
+    step2: 'Mimics testing the texture of fertile crumbly agricultural loam soil.',
+    meaning: 'Upper layer of earth in which plants grow, consisting of organic humus and weathered rock.'
+  },
+  {
+    id: 'ch9_wind',
+    word: 'Wind',
+    emoji: '🌬️',
+    graphic: '💨🍃',
+    gestureName: 'Swaying Breeze Palms',
+    step1: 'Extend both hands with palms facing forward.',
+    step2: 'Sway hands smoothly from side to side like grass blowing in wind.',
+    meaning: 'Perceptible natural movement of the air blowing in a particular direction.'
+  },
+  {
+    id: 'ch9_tree',
+    word: 'Tree',
+    emoji: '🌳',
+    graphic: '🌳🌿',
+    gestureName: 'Forearm Trunk & Branch Fingers',
+    step1: 'Rest right elbow on back of flat left hand, holding forearm upright.',
+    step2: 'Spread right fingers wide and flutter them like leafy branches.',
+    meaning: 'Woody perennial plant whose roots bind soil tightly against erosion.'
+  },
+  {
+    id: 'ch9_protect',
+    word: 'Conservation / Protect',
+    emoji: '🛡️',
+    graphic: '🛡️🌿',
+    gestureName: 'Protective Crossed Wrists',
+    step1: 'Cross wrists in front of chest with closed fists.',
+    step2: 'Hold firm posture like a shield defending nature from destruction.',
+    meaning: 'Prevention of wasteful use and erosion of a valuable natural resource.'
+  },
+
+  // Chapter 10: Rocks & Minerals
+  {
+    id: 'ch10_rock',
+    word: 'Rock',
+    emoji: '🪨',
+    graphic: '🪨⛰️',
+    gestureName: 'Knocking Solid Fist',
+    step1: 'Make solid fist with right hand.',
+    step2: 'Tap top of flat left palm with knuckles to demonstrate rocky hardness.',
+    meaning: 'Naturally occurring solid aggregate of minerals forming Earth\'s crust.'
+  },
+  {
+    id: 'ch10_volcano',
+    word: 'Volcano',
+    emoji: '🌋',
+    graphic: '🌋🔥',
+    gestureName: 'Erupting Lava Cone',
+    step1: 'Bring base of wrists together with fingertips pointing up like a mountain cone.',
+    step2: 'Suddenly explode fingers upward and outward simulating lava eruption.',
+    meaning: 'Mountain or hill with a crater through which lava, rock fragments, and gas erupt.'
+  },
+  {
+    id: 'ch10_fossil',
+    word: 'Fossil',
+    emoji: '🦴',
+    graphic: '🦴🪨',
+    gestureName: 'Imprint on Flat Rock',
+    step1: 'Hold flat left palm open.',
+    step2: 'Press right claw hand firmly into left palm to represent ancient bone imprint.',
+    meaning: 'Preserved remains or impression of a prehistoric organism petrified in rock.'
+  },
+  {
+    id: 'ch10_fuel',
+    word: 'Petroleum / Fuel',
+    emoji: '⛽',
+    graphic: '⛽🚗',
+    gestureName: 'Squeezing Pump Nozzle',
+    step1: 'Make fist with index finger hooked like a petrol pump trigger.',
+    step2: 'Squeeze trigger rhythmically as if pumping fuel into vehicle tank.',
+    meaning: 'Liquid fossil fuel refined into petrol, diesel, kerosene, and lubricants.'
+  },
+
+  // Chapter 11: Earth & Solar System
+  {
+    id: 'ch11_sun',
+    word: 'Sun',
+    emoji: '☀️',
+    graphic: '☀️✨',
+    gestureName: 'Radiating Circle in Sky',
+    step1: 'Form circle with thumb and index finger high up in sky.',
+    step2: 'Burst all fingers open outward into brilliant radiating sun rays.',
+    meaning: 'The star around which the earth and other planets orbit; source of light and heat.'
+  },
+  {
+    id: 'ch11_moon',
+    word: 'Moon',
+    emoji: '🌙',
+    graphic: '🌙🌑',
+    gestureName: 'C-Shape at Eye',
+    step1: 'Curve right thumb and index finger into a "C" crescent shape.',
+    step2: 'Hold near right eye gazing upward toward the night sky.',
+    meaning: 'The natural satellite of the earth, visible by reflected sunlight at night.'
+  },
+  {
+    id: 'ch11_earth',
+    word: 'Earth',
+    emoji: '🌍',
+    graphic: '🌍🌐',
+    gestureName: 'Spinning Spherical Globe',
+    step1: 'Cup both hands together to form a sphere.',
+    step2: 'Rotate spherical hands around vertical axis like revolving Earth.',
+    meaning: 'The planet on which we live; the third planet from the sun in the solar system.'
+  },
+  {
+    id: 'ch11_satellite',
+    word: 'Satellite',
+    emoji: '🛰️',
+    graphic: '🛰️🌍',
+    gestureName: 'Orbiting Hand Around Fist',
+    step1: 'Hold left fist stationary in center representing planet Earth.',
+    step2: 'Circle right index finger smoothly around left fist in an orbit.',
+    meaning: 'An artificial body placed in orbit round the earth in order to collect information.'
+  },
+
+  // Chapter 12: Natural Disasters
+  {
+    id: 'ch12_earthquake',
+    word: 'Earthquake',
+    emoji: '⚡',
+    graphic: '🏚️⚡',
+    gestureName: 'Vibrating Shaking Palms',
+    step1: 'Hold both open flat palms horizontally parallel in front of chest.',
+    step2: 'Vibrate both hands violently side-to-side to depict ground shaking.',
+    meaning: 'Sudden violent shaking of the ground caused by movements within the earth\'s crust.'
+  },
+  {
+    id: 'ch12_volcano',
+    word: 'Volcano',
+    emoji: '🌋',
+    graphic: '🌋💥',
+    gestureName: 'Exploding Mountain Eruption',
+    step1: 'Form a pyramid mountain with both palms facing down.',
+    step2: 'Shoot hands straight up while opening fingers wide like spewing lava.',
+    meaning: 'Vent in the earth\'s crust through which lava, steam, and ashes are expelled.'
+  },
+  {
+    id: 'ch12_flood',
+    word: 'Flood',
+    emoji: '🌊',
+    graphic: '🌊🏠',
+    gestureName: 'Rising Wave Palms',
+    step1: 'Hold palms flat down at waist level.',
+    step2: 'Raise hands undulating like waves up to chest level showing submerging waters.',
+    meaning: 'An overflowing of a large amount of water beyond its normal confines over dry land.'
+  },
+  {
+    id: 'ch12_safety',
+    word: 'Drop & Cover',
+    emoji: '🛡️',
+    graphic: '🛡️🧘',
+    gestureName: 'Crouching Hands Over Head',
+    step1: 'Duck head forward.',
+    step2: 'Clasp both hands tightly behind neck and head in safety shelter posture.',
+    meaning: 'Earthquake survival drill: dropping low, covering neck and head under a sturdy desk.'
+  },
+
+  // Chapter 13: Our Environment
+  {
+    id: 'ch13_env',
+    word: 'Environment',
+    emoji: '🌲',
+    graphic: '🌍🌲',
+    gestureName: 'Encircling World Arms',
+    step1: 'Extend both arms forward with open palms.',
+    step2: 'Sweep arms in a complete embracing circle around yourself.',
+    meaning: 'The surroundings or conditions in which a person, animal, or plant lives.'
+  },
+  {
+    id: 'ch13_pollute',
+    word: 'Pollution',
+    emoji: '🏭',
+    graphic: '🏭☁️',
+    gestureName: 'Coughing Smoke Wave',
+    step1: 'Cover mouth with light fist like coughing.',
+    step2: 'Wave other hand across face with disgusted expression waving off smoke.',
+    meaning: 'Presence in or introduction into the environment of a substance with harmful effects.'
+  },
+  {
+    id: 'ch13_recycle',
+    word: 'Recycle (3Rs)',
+    emoji: '♻️',
+    graphic: '♻️✨',
+    gestureName: 'Three Rolling Finger Orbit',
+    step1: 'Form index and middle fingers into rotating wheel.',
+    step2: 'Roll fingers over each other in circular cycle to show material rebirth.',
+    meaning: 'Convert waste into reusable material to prevent depletion of natural resources.'
+  },
+  {
+    id: 'ch13_nature',
+    word: 'Nature',
+    emoji: '🍃',
+    graphic: '🍃🌸',
+    gestureName: 'Sprouting Plant Upward',
+    step1: 'Cup right hand inside left palm like a seedling.',
+    step2: 'Grow right hand straight upward through left fingers opening into blooming blossom.',
+    meaning: 'The phenomena of the physical world collectively, including plants, animals, and landscapes.'
+  },
+
+  // Chapter 14: Safety & First Aid
+  {
+    id: 'ch14_safety',
+    word: 'Safety / Rule',
+    emoji: '🚦',
+    graphic: '🚦🛑',
+    gestureName: 'Stop Palm at Traffic Light',
+    step1: 'Raise right hand upright with palm flat forward in universal STOP gesture.',
+    step2: 'Nod head firmly to convey following rules and precautions.',
+    meaning: 'The condition of being protected from or unlikely to cause danger, risk, or injury.'
+  },
+  {
+    id: 'ch14_firstaid',
+    word: 'First Aid',
+    emoji: '🩹',
+    graphic: '🩹❤️',
+    gestureName: 'Wrapping Bandage Around Arm',
+    step1: 'Extend left arm forward.',
+    step2: 'Wind right flat hand smoothly around left wrist simulating sterile bandaging.',
+    meaning: 'Help given to a sick or injured person until full medical treatment is available.'
+  },
+  {
+    id: 'ch14_fire',
+    word: 'Fire Safety',
+    emoji: '🔥',
+    graphic: '🔥🧯',
+    gestureName: 'Wiggling Flame Fingers',
+    step1: 'Hold both hands in front of chest with fingers pointing upward.',
+    step2: 'Wiggle fingers alternately while rising up like dancing heat flames.',
+    meaning: 'Set of practices intended to reduce the destruction caused by fire.'
+  },
+  {
+    id: 'ch14_doctor',
+    word: 'Doctor / Hospital',
+    emoji: '👨‍⚕️',
+    graphic: '🩺🏥',
+    gestureName: 'Checking Wrist Pulse',
+    step1: 'Extend left palm facing up.',
+    step2: 'Place right index and middle fingertips on left wrist to check heartbeat pulse.',
+    meaning: 'Medical professional qualified to treat people who are ill or injured.'
   }
+
 ];
 
 let currentIslIndex = 0;
@@ -1591,3 +2070,309 @@ function triggerConfetti() {
     container.innerHTML = '';
   }, 4000);
 }
+
+
+/* =====================================================
+   16. UNIVERSAL TACTILE MATCHING (Chapters 3 to 14)
+   ===================================================== */
+function initUniversalMatching() {
+  const matchContainers = document.querySelectorAll('.tactile-match-container');
+
+  matchContainers.forEach(container => {
+    let selectedItem = null;
+    let matchedPairs = 0;
+    const items = container.querySelectorAll('.tactile-item');
+    const totalPairs = items.length / 2;
+
+    items.forEach(item => {
+      item.addEventListener('click', () => {
+        if (item.classList.contains('matched')) return;
+
+        if (!selectedItem) {
+          // First selection
+          selectedItem = item;
+          item.classList.add('selected');
+        } else if (selectedItem === item) {
+          // Deselect
+          selectedItem.classList.remove('selected');
+          selectedItem = null;
+        } else {
+          // Second selection - verify pair
+          const pair1 = selectedItem.getAttribute('data-pair');
+          const pair2 = item.getAttribute('data-pair');
+
+          if (pair1 && pair2 && pair1 === pair2) {
+            // Match found!
+            selectedItem.classList.remove('selected');
+            selectedItem.classList.add('matched');
+            item.classList.add('matched');
+            matchedPairs++;
+
+            if (matchedPairs >= totalPairs) {
+              triggerConfetti();
+            }
+            selectedItem = null;
+          } else {
+            // No match - brief error shake
+            item.classList.add('wrong');
+            setTimeout(() => {
+              item.classList.remove('wrong');
+              if (selectedItem) selectedItem.classList.remove('selected');
+              selectedItem = null;
+            }, 400);
+          }
+        }
+      });
+    });
+  });
+}
+
+/* =====================================================
+   17. UNIVERSAL CHAPTER QUIZZES (Chapters 3 to 14)
+   ===================================================== */
+function initUniversalQuizzes() {
+  const chapters = ['ch3', 'ch4', 'ch5', 'ch6', 'ch8', 'ch9', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14'];
+
+  chapters.forEach(ch => {
+    const page = document.getElementById(`page-${ch}`);
+    if (!page) return;
+
+    const checkBtn = document.getElementById(`check-${ch}-quiz-btn`);
+    const retryBtn = document.getElementById(`retry-${ch}-quiz-btn`);
+    const scoreContainer = document.getElementById(`${ch}-quiz-score`);
+    const scoreNum = document.getElementById(`${ch}-quiz-num`);
+    const scoreStars = document.getElementById(`${ch}-quiz-stars`);
+    const options = page.querySelectorAll(`.quiz-option[data-${ch}-correct]`);
+    const questions = page.querySelectorAll(`#page-${ch} .quiz-question`);
+
+    let userAnswers = {};
+
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        if (checkBtn && checkBtn.disabled) return;
+
+        const qId = opt.closest('.quiz-question').id;
+        const siblings = opt.closest('.quiz-options').querySelectorAll('.quiz-option');
+
+        siblings.forEach(s => s.classList.remove('selected'));
+        opt.classList.add('selected');
+
+        userAnswers[qId] = {
+          correct: opt.getAttribute(`data-${ch}-correct`) === 'true',
+          element: opt
+        };
+      });
+    });
+
+    if (checkBtn) {
+      checkBtn.addEventListener('click', () => {
+        const total = questions.length;
+        if (Object.keys(userAnswers).length < total) {
+          alert(`Please answer all ${total} questions before checking! 📝`);
+          return;
+        }
+
+        checkBtn.disabled = true;
+        let correctCount = 0;
+
+        questions.forEach(q => {
+          const qId = q.id;
+          const ans = userAnswers[qId];
+          const explEl = document.getElementById(`${qId}-expl`);
+          const fbEl = document.getElementById(`${qId}-feedback`);
+
+          if (ans && ans.correct) {
+            correctCount++;
+            ans.element.classList.add('correct');
+            if (fbEl) {
+              fbEl.className = 'quiz-feedback correct show';
+              fbEl.textContent = '✅ Correct! Well done!';
+            }
+          } else if (ans) {
+            ans.element.classList.add('incorrect');
+            const correctOpt = q.querySelector(`.quiz-option[data-${ch}-correct="true"]`);
+            if (correctOpt) correctOpt.classList.add('correct');
+            if (fbEl) {
+              fbEl.className = 'quiz-feedback incorrect show';
+              fbEl.textContent = '❌ Incorrect. Check the correct answer above.';
+            }
+          }
+
+          if (explEl) explEl.classList.add('show');
+        });
+
+        checkBtn.style.display = 'none';
+        if (scoreContainer) scoreContainer.classList.add('show');
+        if (scoreNum) scoreNum.textContent = `${correctCount} / ${total}`;
+
+        const pct = correctCount / total;
+        if (scoreStars) {
+          if (pct === 1) scoreStars.textContent = '🌟🌟🌟';
+          else if (pct >= 0.6) scoreStars.textContent = '⭐⭐';
+          else scoreStars.textContent = '⭐';
+        }
+
+        localStorage.setItem(`lwe_${ch}_completed`, 'true');
+        applyCompletionBadge(ch);
+
+        if (pct >= 0.6) triggerConfetti();
+      });
+    }
+
+    if (retryBtn) {
+      retryBtn.addEventListener('click', () => {
+        userAnswers = {};
+        if (checkBtn) {
+          checkBtn.disabled = false;
+          checkBtn.style.display = 'inline-flex';
+        }
+        if (scoreContainer) scoreContainer.classList.remove('show');
+
+        options.forEach(opt => opt.classList.remove('selected', 'correct', 'incorrect'));
+        page.querySelectorAll('.quiz-feedback').forEach(el => el.classList.remove('show', 'correct', 'incorrect'));
+        page.querySelectorAll('.quiz-explanation').forEach(el => el.classList.remove('show'));
+
+        const quizSection = document.getElementById(`section-${ch}-quiz`);
+        if (quizSection) quizSection.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+  });
+}
+
+/* =====================================================
+   18. AUTHENTIC NEP/NCF OMR SHEETS (Test Papers 1 & 2)
+   ===================================================== */
+function initOMRSheets() {
+  const tests = [
+    {
+      id: 'test1',
+      keys: { '1': 'B', '2': 'A', '3': 'C', '4': 'C', '5': 'C' }
+    },
+    {
+      id: 'test2',
+      keys: { '1': 'C', '2': 'B', '3': 'A', '4': 'D', '5': 'C' }
+    }
+  ];
+
+  tests.forEach(t => {
+    const bubbles = document.querySelectorAll(`.omr-bubble-btn[data-test="${t.id}"]`);
+    const evalBtn = document.getElementById(`evaluate-${t.id}-omr-btn`);
+    const resetBtn = document.getElementById(`reset-${t.id}-omr-btn`);
+    const scoreBox = document.getElementById(`${t.id}-omr-score`);
+    const scoreNum = document.getElementById(`${t.id}-omr-score-num`);
+    const scoreStars = document.getElementById(`${t.id}-omr-stars`);
+
+    const selectedBubbles = {};
+
+    bubbles.forEach(b => {
+      b.addEventListener('click', () => {
+        if (evalBtn && evalBtn.disabled) return;
+
+        const q = b.getAttribute('data-q');
+        const letter = b.getAttribute('data-letter');
+
+        // Unfill other bubbles in this row
+        document.querySelectorAll(`.omr-bubble-btn[data-test="${t.id}"][data-q="${q}"]`).forEach(sibling => {
+          sibling.classList.remove('filled');
+        });
+
+        // Fill this bubble
+        b.classList.add('filled');
+        selectedBubbles[q] = letter;
+      });
+    });
+
+    if (evalBtn) {
+      evalBtn.addEventListener('click', () => {
+        const total = Object.keys(t.keys).length;
+        if (Object.keys(selectedBubbles).length < total) {
+          alert(`Please fill in all ${total} OMR bubbles before evaluation! 🔘`);
+          return;
+        }
+
+        evalBtn.disabled = true;
+        let score = 0;
+
+        for (const [qNum, correctLetter] of Object.entries(t.keys)) {
+          const userLetter = selectedBubbles[qNum];
+          const userBubble = document.querySelector(`.omr-bubble-btn[data-test="${t.id}"][data-q="${qNum}"][data-letter="${userLetter}"]`);
+          const correctBubble = document.querySelector(`.omr-bubble-btn[data-test="${t.id}"][data-q="${qNum}"][data-letter="${correctLetter}"]`);
+          const fbBadge = document.getElementById(`${t.id}-fb-${qNum}`);
+
+          if (userLetter === correctLetter) {
+            score++;
+            if (userBubble) userBubble.classList.add('correct-filled');
+            if (fbBadge) {
+              fbBadge.style.color = '#27ae60';
+              fbBadge.textContent = '✅ Correct (+1)';
+            }
+          } else {
+            if (userBubble) userBubble.classList.add('wrong-filled');
+            if (correctBubble) correctBubble.classList.add('correct-filled');
+            if (fbBadge) {
+              fbBadge.style.color = '#e74c3c';
+              fbBadge.textContent = `❌ Ans: (${correctLetter})`;
+            }
+          }
+        }
+
+        evalBtn.style.display = 'none';
+        if (scoreBox) scoreBox.classList.add('show');
+        if (scoreNum) scoreNum.textContent = `${score} / ${total}`;
+
+        if (scoreStars) {
+          if (score === 5) scoreStars.textContent = '⭐⭐⭐⭐⭐';
+          else if (score >= 4) scoreStars.textContent = '⭐⭐⭐⭐';
+          else if (score >= 3) scoreStars.textContent = '⭐⭐⭐';
+          else scoreStars.textContent = '⭐⭐';
+        }
+
+        localStorage.setItem(`lwe_${t.id}_completed`, 'true');
+        applyCompletionBadge(t.id);
+
+        if (score >= 3) triggerConfetti();
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        for (const k in selectedBubbles) delete selectedBubbles[k];
+        if (evalBtn) {
+          evalBtn.disabled = false;
+          evalBtn.style.display = 'inline-flex';
+        }
+        if (scoreBox) scoreBox.classList.remove('show');
+
+        bubbles.forEach(b => b.classList.remove('filled', 'correct-filled', 'wrong-filled'));
+        document.querySelectorAll(`[id^="${t.id}-fb-"]`).forEach(el => el.textContent = '');
+      });
+    }
+  });
+}
+
+// Extend applyCompletionBadge and restoreSavedProgress
+const origApplyBadge = applyCompletionBadge;
+applyCompletionBadge = function(chKey) {
+  const card = document.querySelector(`.unit-card[data-page="${chKey}"] .progress-bar__fill`) ||
+               document.querySelector(`#unit-card-${chKey} .progress-bar__fill`);
+  if (card) card.style.width = '100%';
+
+  const navLink = document.querySelector(`#nav-${chKey} .sidebar__progress`);
+  if (navLink) {
+    navLink.classList.add('completed');
+    navLink.textContent = '✓';
+    navLink.style.color = 'var(--color-primary)';
+    navLink.style.fontWeight = '900';
+  }
+};
+
+const origRestore = restoreSavedProgress;
+restoreSavedProgress = function() {
+  if (origRestore) origRestore();
+  const allModules = ['ch1', 'ch2', 'ch3', 'ch4', 'ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'test1', 'test2'];
+  allModules.forEach(m => {
+    if (localStorage.getItem(`lwe_${m}_completed`) === 'true') {
+      applyCompletionBadge(m);
+    }
+  });
+};
