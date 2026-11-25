@@ -1,9 +1,9 @@
-const CACHE_NAME = 'lwe-v5-cache';
+const CACHE_NAME = 'lwe-v6-cache';
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './styles.css?v=5.0',
-  './app.js?v=5.0',
+  './styles.css?v=6.0',
+  './app.js?v=6.0',
   './manifest.json',
   './icon.svg'
 ];
