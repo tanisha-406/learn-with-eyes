@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2ecc71"/>
+      <stop offset="50%" stop-color="#27ae60"/>
+      <stop offset="100%" stop-color="#16a085"/>
+    </linearGradient>
+    <filter id="dropGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <!-- Background Circle with Soft Border -->
+  <rect width="512" height="512" rx="128" fill="url(#bgGrad)"/>
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="none" stroke="#ffffff" stroke-opacity="0.3" stroke-width="8"/>
+  
+  <!-- Central Visual Symbol: Sprouting Plant + Open Eye + Book Base -->
+  <g filter="url(#dropGlow)">
+    <!-- Open Book Base -->
+    <path d="M140 370 C 200 345, 240 365, 256 375 C 272 365, 312 345, 372 370 L 372 400 C 312 375, 272 395, 256 405 C 240 395, 200 375, 140 400 Z" fill="#ffffff" opacity="0.95"/>
+    <path d="M256 375 L 256 405" stroke="#27ae60" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- The Seeing Eye (Visual Learning for Deaf Children) -->
+    <path d="M120 256 Q 256 140 392 256 Q 256 372 120 256 Z" fill="#ffffff"/>
+    <ellipse cx="256" cy="256" rx="60" ry="60" fill="#2c3e50"/>
+    <ellipse cx="256" cy="256" rx="36" ry="36" fill="#3498db"/>
+    <ellipse cx="256" cy="256" rx="20" ry="20" fill="#1a252f"/>
+    <circle cx="270" cy="242" r="9" fill="#ffffff"/>
+
+    <!-- Sprouting Leaves Rising Out of Eye/Book -->
+    <path d="M256 196 Q 256 100 330 90 Q 320 160 256 196 Z" fill="#f1c40f"/>
+    <path d="M256 196 Q 256 110 190 100 Q 195 170 256 196 Z" fill="#2ecc71"/>
+    <path d="M256 196 L 256 220" stroke="#27ae60" stroke-width="6" stroke-linecap="round"/>
+  </g>
+</svg>
