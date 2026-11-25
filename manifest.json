@@ -1,0 +1,19 @@
+{
+  "name": "Learn with Eyes — Class 5 Science (Anushruti Academy for the Deaf)",
+  "short_name": "Learn with Eyes",
+  "description": "Visual-first science learning platform for deaf and hard-of-hearing students. Class 5 EVS / Science curriculum.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fdf6ec",
+  "theme_color": "#27ae60",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "accessibility"]
+}

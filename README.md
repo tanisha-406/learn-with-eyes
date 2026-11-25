@@ -70,39 +70,37 @@ The platform is mapped 1-to-1 with the complete 120-page textbook, with **all 14
 
 | Feature | Description |
 | :--- | :--- |
+| **🧑‍🏫 Teacher Smartboard Mode** | One-click projector & smartboard presentation mode with Hide/Show Answers toggle, classroom deaf pedagogy tips, and live quizzing. |
+| **👤 Multi-Student Profiles** | Enables shared school tablet usage in computer labs with individual progress tracking, student switcher, and class reset tools. |
+| **📊 Class Roster & CSV Export** | Master teacher ledger tracking all enrolled students, chapter mastery, model test scores, and 1-click CSV gradebook export. |
+| **🖨️ Printable Classroom Worksheets** | Instant generation of high-contrast, black-and-white A4 student worksheets with match-the-following, diagram sketching, and OMR bubbles. |
+| **🧪 Interactive Visual Labs** | Hands-on visual manipulatives including Day 1–10 Seed Germination time scrubber and States of Matter particle sandbox. |
+| **📖 ISL Science Dictionary** | Searchable visual glossary covering curriculum vocabulary with handshape guides, bilingual terms, and scientific definitions. |
+| **🎓 Certificate of Science Excellence** | Printable, personalized achievement certificate with IIT Roorkee / Anushruti honors for students mastering the curriculum. |
+| **🌐 Bilingual Support (EN / हिंदी)** | Dual-language toggle providing Hindi terminology alongside English across chapters, lessons, and tests. |
+| **📳 Haptic & Tactile Feedback** | Mobile and tablet vibration feedback (`navigator.vibrate`) on matching pairs, bubble fills, and quiz submissions. |
+| **📱 Installable Offline PWA** | Progressive Web App with Cache-First Service Worker (`sw.js`) and `manifest.json` for 100% offline classroom tablet operation. |
 | **📘 120-Page Full Textbook PDF** | Complete high-resolution digital compilation of *Innovators' Science 5* (EduRise India) available for 1-click download and offline reading. |
-| **🤟 Accessible ISL Modal System** | Interactive modal dialogs featuring animated handshape guides, step-by-step gesture steps, and scientific definitions across curriculum vocabulary signs. |
-| **🎮 Universal Tactile Matching Games** | Works with **both** desktop mice AND **Touch/Click-to-Match** for classroom touchscreens. Includes real-time score tracking, reset buttons, and celebratory feedback. |
-| **📝 Interactive NEP 2020 OMR Sheets** | Authentic bubble-filling interface simulating standard examination answer sheets for Model Test Papers 1 & 2 with real-time feedback and review. |
-| **💡 Visual Quizzes with Explanations** | All 14 chapters feature interactive multiple-choice visual assessments with instant color feedback, comprehensive explanations, star ratings (🌟🌟🌟), and retry functionality. |
-| **🧭 Curriculum Filtering & Navigation** | One-click filter chips to view by unit (`All`, `Unit I`, `Unit II`, `Unit III`, `Unit IV`) or jump straight to any chapter from the sidebar or home grid. |
+| **🤟 Accessible ISL Modal System** | Interactive modal dialogs featuring animated handshape guides, step-by-step gesture steps, and scientific definitions. |
+| **🎮 Universal Tactile Matching Games** | Works with **both** desktop mice AND **Touch/Click-to-Match** for classroom touchscreens with score tracking and reset. |
+| **📝 Interactive NEP 2020 OMR Sheets** | Authentic bubble-filling interface simulating standard examination answer sheets for Model Test Papers 1 & 2. |
 | **🌙 Dark & High-Contrast Modes** | Full theme switcher (Light / Dark / High-Contrast) designed to minimize visual fatigue for low-vision and deaf learners. |
 | **🔤 Dynamic Text Scaling** | One-click font sizing (`Normal` → `Large` → `Extra Large`) for accessibility across varying screen distances. |
-| **💾 Progress Persistence** | Uses `localStorage` to preserve quiz completions, star rewards, theme preferences, and font scaling across browser restarts. |
-| **📱 100% Offline Capable** | Built with pure HTML5, CSS3, and Vanilla JavaScript with no npm dependencies, ensuring instant offline classroom usability. |
 
 ---
 
 ## 📁 Repository Structure
 
 ```
-├── index.html                           # Accessible visual learning web application (311 KB)
-├── styles.css                           # Design system, CSS tokens, OMR styles, responsive layout
-├── app.js                               # Interactive logic (14 chapters, ISL, touch matching, quizzes, OMR)
+├── index.html                           # Accessible visual learning web application
+├── styles.css                           # Design system, OMR styles, teacher toolbar, print worksheets
+├── app.js                               # Interactive logic (simulators, profiles, teacher tools, ISL glossary)
+├── sw.js                                # Offline Cache-First Service Worker (PWA)
+├── manifest.json                        # Progressive Web App manifest for installable tablets
+├── icon.svg                             # High-resolution vector brand icon
 ├── science-5-full.pdf                   # Complete 120-page textbook PDF (55.99 MB)
-├── Innovators_Science_5_Full_Book.pdf   # Complete 120-page textbook PDF (master copy)
 ├── book_pages/                          # High-res textbook page images (page_001.webp - page_120.webp)
 ├── images/                              # Visual illustrations and educational diagrams
-│   ├── plant_hero.png
-│   ├── food_hero.png
-│   ├── force_hero.png
-│   ├── nutrients_guide.png
-│   ├── simple_machines.png
-│   ├── seed_germination.png
-│   ├── seed_dispersal.png
-│   ├── dicot_monocot.png
-│   ├── vegetative_reproduction.png
-│   └── agriculture_stages.png
 └── README.md                            # Comprehensive project documentation
 ```
 

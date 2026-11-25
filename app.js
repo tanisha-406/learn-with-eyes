@@ -5,12 +5,20 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  registerServiceWorker();
   initThemeAndAccessibility();
+  initStudentProfiles();
+  initTeacherMode();
+  initBilingualMode();
   initNavigation();
   initTabs();
   initScrollEffects();
   initISLModalSystem();
   initChapterPreviewModal();
+  initGerminationSimulator();
+  initMatterSimulator();
+  initISLGlossary();
+  initCertificateModal();
   initMatchingGame();
   initCh2MatchingGame();
   initCh7MatchingGame();
@@ -2050,6 +2058,7 @@ function restoreSavedProgress() {
 function triggerConfetti() {
   const container = document.getElementById('confettiContainer');
   if (!container) return;
+  triggerHaptic([100, 50, 100, 50, 150]);
 
   container.innerHTML = '';
   const colors = ['#2ecc71', '#3498db', '#f1c40f', '#e74c3c', '#9b59b6', '#e67e22', '#1abc9c'];
@@ -2364,15 +2373,790 @@ applyCompletionBadge = function(chKey) {
     navLink.style.color = 'var(--color-primary)';
     navLink.style.fontWeight = '900';
   }
+
+  // Record completion for active student
+  if (typeof getActiveStudentId === 'function') {
+    const studentId = getActiveStudentId();
+    localStorage.setItem(`lwe_${studentId}_${chKey}_completed`, 'true');
+  }
 };
 
 const origRestore = restoreSavedProgress;
 restoreSavedProgress = function() {
-  if (origRestore) origRestore();
+  const studentId = typeof getActiveStudentId === 'function' ? getActiveStudentId() : 'student_1';
   const allModules = ['ch1', 'ch2', 'ch3', 'ch4', 'ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'test1', 'test2'];
   allModules.forEach(m => {
-    if (localStorage.getItem(`lwe_${m}_completed`) === 'true') {
+    if (localStorage.getItem(`lwe_${studentId}_${m}_completed`) === 'true' || 
+       (studentId === 'student_1' && localStorage.getItem(`lwe_${m}_completed`) === 'true')) {
       applyCompletionBadge(m);
     }
   });
 };
+
+
+/* =====================================================
+   19. SERVICE WORKER & OFFLINE PWA REGISTRATION
+   ===================================================== */
+function registerServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('Learn with Eyes PWA Service Worker Registered', reg.scope))
+        .catch(err => console.warn('Service Worker registration skipped:', err));
+    });
+  }
+}
+
+/* =====================================================
+   20. HAPTIC & TACTILE FEEDBACK FOR DEAF LEARNERS
+   ===================================================== */
+function triggerHaptic(pattern = [50]) {
+  if ('vibrate' in navigator) {
+    try {
+      navigator.vibrate(pattern);
+    } catch (e) {
+      // Haptics unavailable
+    }
+  }
+}
+
+/* =====================================================
+   21. MULTI-STUDENT PROFILE & CLASS ROSTER SYSTEM
+   ===================================================== */
+const DEFAULT_STUDENTS = [
+  { id: 'student_1', name: 'Aarav (Student 1)' },
+  { id: 'student_2', name: 'Priya (Student 2)' },
+  { id: 'student_3', name: 'Rohan (Student 3)' }
+];
+
+function getStudentList() {
+  const saved = localStorage.getItem('lwe_student_roster');
+  if (saved) {
+    try { return JSON.parse(saved); } catch (e) {}
+  }
+  return DEFAULT_STUDENTS;
+}
+
+function saveStudentList(list) {
+  localStorage.setItem('lwe_student_roster', JSON.stringify(list));
+}
+
+function getActiveStudentId() {
+  return localStorage.getItem('lwe_active_student') || 'student_1';
+}
+
+function getActiveStudent() {
+  const list = getStudentList();
+  const activeId = getActiveStudentId();
+  return list.find(s => s.id === activeId) || list[0] || { id: 'student_1', name: 'Student 1' };
+}
+
+function getStudentStorageKey(key) {
+  const studentId = getActiveStudentId();
+  return `lwe_${studentId}_${key}`;
+}
+
+function initStudentProfiles() {
+  const profileBtn = document.getElementById('studentProfileBtn');
+  const profileModal = document.getElementById('profileModal');
+  const closeBtn = document.getElementById('closeProfileModal');
+  const studentNameDisplay = document.getElementById('currentStudentName');
+  const container = document.getElementById('studentListContainer');
+  const addBtn = document.getElementById('createStudentBtn');
+  const nameInput = document.getElementById('newStudentNameInput');
+  const addNewFromDash = document.getElementById('addNewStudentBtn');
+  const exportCsvBtn = document.getElementById('exportCsvBtn');
+  const resetCurrentBtn = document.getElementById('resetCurrentStudentBtn');
+
+  // Update header student label
+  const curStudent = getActiveStudent();
+  if (studentNameDisplay) studentNameDisplay.textContent = curStudent.name.split(' ')[0];
+
+  function renderStudentModalList() {
+    if (!container) return;
+    const list = getStudentList();
+    const activeId = getActiveStudentId();
+    container.innerHTML = '';
+
+    list.forEach(student => {
+      const card = document.createElement('div');
+      card.className = 'tactile-item' + (student.id === activeId ? ' selected' : '');
+      card.style.justifyContent = 'space-between';
+      card.style.padding = '10px 14px';
+
+      // Count completed
+      let doneCount = 0;
+      const allModules = ['ch1', 'ch2', 'ch3', 'ch4', 'ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'test1', 'test2'];
+      allModules.forEach(m => {
+        if (localStorage.getItem(`lwe_${student.id}_${m}_completed`) === 'true' || (student.id === 'student_1' && localStorage.getItem(`lwe_${m}_completed`) === 'true')) {
+          doneCount++;
+        }
+      });
+
+      card.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.2rem;">👤</span>
+          <div>
+            <strong>${student.name}</strong>
+            <div style="font-size: 0.8rem; color: var(--text-secondary);">${doneCount} / 16 Units Mastered</div>
+          </div>
+        </div>
+        <div>
+          ${student.id === activeId ? '<span style="color: #27ae60; font-weight: 800;">✓ Active</span>' : '<button class="btn btn--sm btn--secondary switch-student-btn" data-id="' + student.id + '">Select</button>'}
+        </div>
+      `;
+
+      card.addEventListener('click', (e) => {
+        if (e.target.classList.contains('switch-student-btn') || !e.target.closest('button')) {
+          switchStudent(student.id);
+        }
+      });
+
+      container.appendChild(card);
+    });
+  }
+
+  function switchStudent(studentId) {
+    localStorage.setItem('lwe_active_student', studentId);
+    const student = getActiveStudent();
+    if (studentNameDisplay) studentNameDisplay.textContent = student.name.split(' ')[0];
+    triggerHaptic([50, 50]);
+
+    // Clear UI checkmarks and progress bars before reloading
+    document.querySelectorAll('.sidebar__progress').forEach(p => {
+      p.classList.remove('completed');
+      p.textContent = '●';
+      p.style.color = '';
+    });
+    document.querySelectorAll('.progress-bar__fill').forEach(f => f.style.width = '0%');
+
+    // Reload student progress
+    restoreSavedProgress();
+    renderStudentModalList();
+    renderRosterTable();
+
+    if (profileModal) profileModal.classList.remove('active');
+  }
+
+  if (profileBtn && profileModal) {
+    profileBtn.addEventListener('click', () => {
+      renderStudentModalList();
+      profileModal.classList.add('active');
+    });
+  }
+
+  if (closeBtn && profileModal) {
+    closeBtn.addEventListener('click', () => profileModal.classList.remove('active'));
+  }
+
+  if (addBtn && nameInput) {
+    addBtn.addEventListener('click', () => {
+      const name = nameInput.value.trim();
+      if (!name) return;
+      const list = getStudentList();
+      const newId = 'student_' + (Date.now());
+      list.push({ id: newId, name: name });
+      saveStudentList(list);
+      nameInput.value = '';
+      switchStudent(newId);
+    });
+  }
+
+  if (addNewFromDash && profileModal) {
+    addNewFromDash.addEventListener('click', () => {
+      renderStudentModalList();
+      profileModal.classList.add('active');
+    });
+  }
+
+  if (resetCurrentBtn) {
+    resetCurrentBtn.addEventListener('click', () => {
+      const student = getActiveStudent();
+      if (confirm(`Reset all recorded progress for ${student.name}? This will clear test scores and checkmarks for this student.`)) {
+        const allModules = ['ch1', 'ch2', 'ch3', 'ch4', 'ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'test1', 'test2'];
+        allModules.forEach(m => {
+          localStorage.removeItem(`lwe_${student.id}_${m}_completed`);
+          if (student.id === 'student_1') localStorage.removeItem(`lwe_${m}_completed`);
+        });
+        switchStudent(student.id);
+      }
+    });
+  }
+
+  if (exportCsvBtn) {
+    exportCsvBtn.addEventListener('click', exportClassRosterCsv);
+  }
+
+  renderRosterTable();
+}
+
+function renderRosterTable() {
+  const tableBody = document.getElementById('rosterTableBody');
+  const countBadge = document.getElementById('rosterCountBadge');
+  if (!tableBody) return;
+
+  const list = getStudentList();
+  const activeId = getActiveStudentId();
+  if (countBadge) countBadge.textContent = `${list.length} Students`;
+  tableBody.innerHTML = '';
+
+  const allModules = ['ch1', 'ch2', 'ch3', 'ch4', 'ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'test1', 'test2'];
+
+  list.forEach(student => {
+    let completedCount = 0;
+    allModules.forEach(m => {
+      if (localStorage.getItem(`lwe_${student.id}_${m}_completed`) === 'true' || (student.id === 'student_1' && localStorage.getItem(`lwe_${m}_completed`) === 'true')) {
+        completedCount++;
+      }
+    });
+
+    const isTest1Done = localStorage.getItem(`lwe_${student.id}_test1_completed`) === 'true' || (student.id === 'student_1' && localStorage.getItem('lwe_test1_completed') === 'true');
+    const isTest2Done = localStorage.getItem(`lwe_${student.id}_test2_completed`) === 'true' || (student.id === 'student_1' && localStorage.getItem('lwe_test2_completed') === 'true');
+
+    const tr = document.createElement('tr');
+    tr.style.borderBottom = '1px solid #e2e8f0';
+    tr.innerHTML = `
+      <td style="padding: 10px 14px; font-weight: 700;">
+        ${student.name} ${student.id === activeId ? '<span style="color: #27ae60; font-size: 0.8rem;">(Active)</span>' : ''}
+      </td>
+      <td style="padding: 10px 14px;">${completedCount} / 16</td>
+      <td style="padding: 10px 14px; color: #f39c12;">${'★'.repeat(Math.min(5, Math.ceil(completedCount / 3))) || '☆'}</td>
+      <td style="padding: 10px 14px;">${isTest1Done ? '✅ Passed (5/5)' : '⏳ Pending'}</td>
+      <td style="padding: 10px 14px;">${isTest2Done ? '✅ Passed (5/5)' : '⏳ Pending'}</td>
+      <td style="padding: 10px 14px; text-align: right;">
+        <button class="btn btn--sm btn--secondary switch-roster-btn" data-id="${student.id}" style="padding: 4px 10px;">Select</button>
+      </td>
+    `;
+
+    tr.querySelector('.switch-roster-btn').addEventListener('click', () => {
+      localStorage.setItem('lwe_active_student', student.id);
+      location.reload();
+    });
+
+    tableBody.appendChild(tr);
+  });
+}
+
+function exportClassRosterCsv() {
+  const list = getStudentList();
+  const allModules = ['ch1', 'ch2', 'ch3', 'ch4', 'ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'test1', 'test2'];
+  let csv = 'Student ID,Student Name,Completed Units (out of 16),Completion %,Model Test 1,Model Test 2\n';
+
+  list.forEach(student => {
+    let completedCount = 0;
+    allModules.forEach(m => {
+      if (localStorage.getItem(`lwe_${student.id}_${m}_completed`) === 'true' || (student.id === 'student_1' && localStorage.getItem(`lwe_${m}_completed`) === 'true')) {
+        completedCount++;
+      }
+    });
+    const t1 = (localStorage.getItem(`lwe_${student.id}_test1_completed`) === 'true' || (student.id === 'student_1' && localStorage.getItem('lwe_test1_completed') === 'true')) ? 'Passed' : 'Pending';
+    const t2 = (localStorage.getItem(`lwe_${student.id}_test2_completed`) === 'true' || (student.id === 'student_1' && localStorage.getItem('lwe_test2_completed') === 'true')) ? 'Passed' : 'Pending';
+    const pct = Math.round((completedCount / 16) * 100);
+    csv += `"${student.id}","${student.name}",${completedCount},"${pct}%","${t1}","${t2}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Anushruti_Class5_Science_Roster_${new Date().toISOString().slice(0, 10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+/* =====================================================
+   22. TEACHER MODE & WORKSHEET GENERATOR
+   ===================================================== */
+function initTeacherMode() {
+  const teacherBtn = document.getElementById('teacherModeBtn');
+  if (teacherBtn) {
+    teacherBtn.addEventListener('click', () => {
+      document.body.classList.toggle('teacher-mode');
+      const isActive = document.body.classList.contains('teacher-mode');
+      teacherBtn.classList.toggle('active', isActive);
+      triggerHaptic([60, 40]);
+    });
+  }
+
+  // Answer hiding toggle in Teacher Mode
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.classList.contains('toggle-answers-btn')) {
+      document.body.classList.toggle('hide-answers');
+      const isHidden = document.body.classList.contains('hide-answers');
+      e.target.textContent = isHidden ? '🙈 Answers Hidden' : '👁️ Hide/Show Answers';
+      triggerHaptic([40]);
+    }
+
+    if (e.target && e.target.closest('.print-worksheet-btn')) {
+      const btn = e.target.closest('.print-worksheet-btn');
+      const chKey = btn.getAttribute('data-ch') || 'ch1';
+      generateAndPrintWorksheet(chKey);
+    }
+  });
+}
+
+function generateAndPrintWorksheet(chKey) {
+  const ws = document.getElementById('printableWorksheet');
+  if (!ws) return;
+
+  const chTitles = {
+    ch1: 'Chapter 1: Growing Plants (Reproduction by Seeds, Germination & Agriculture)',
+    ch6: 'Chapter 6: Solids, Liquids and Gases (Arrangement of Molecules & Changes)',
+    ch7: 'Chapter 7: Force, Energy and Simple Machines'
+  };
+
+  const title = chTitles[chKey] || `Chapter ${chKey.replace('ch', '')}: Science Assessment`;
+
+  ws.innerHTML = `
+    <div class="ws-header">
+      <div class="ws-school">Anushruti Academy for the Deaf • IIT Roorkee</div>
+      <div style="font-size: 11pt; font-weight: bold; margin-top: 2px;">Class 5 EVS / Science • Visual Learning Worksheet</div>
+      <div style="font-size: 12pt; margin-top: 4px; text-decoration: underline;">${title}</div>
+    </div>
+
+    <div class="ws-meta-row">
+      <span><strong>Student Name:</strong> ________________________________</span>
+      <span><strong>Roll No:</strong> _______</span>
+      <span><strong>Date:</strong> ____________</span>
+    </div>
+
+    <div class="ws-section-title">SECTION A: Visual Match-the-Following (Draw Lines)</div>
+    <table class="ws-match-table">
+      <tr>
+        <td style="width: 50%;"><strong>Column A (Concept)</strong></td>
+        <td style="width: 50%;"><strong>Column B (Description / Function)</strong></td>
+      </tr>
+      <tr>
+        <td>1. 🌰 Cotyledon</td>
+        <td>(   ) A. Seed coat that protects the baby plant</td>
+      </tr>
+      <tr>
+        <td>2. 💧 Water & Air</td>
+        <td>(   ) B. Part that stores food for the growing embryo</td>
+      </tr>
+      <tr>
+        <td>3. 💨 Dandelion Seed</td>
+        <td>(   ) C. Dispersed by animals and human clothing</td>
+      </tr>
+      <tr>
+        <td>4. 🪝 Xanthium / Cocklebur</td>
+        <td>(   ) D. Carried by wind using light, fluffy hair</td>
+      </tr>
+      <tr>
+        <td>5. 🛡️ Testa</td>
+        <td>(   ) E. Essential elements needed for seed germination</td>
+      </tr>
+    </table>
+
+    <div class="ws-section-title">SECTION B: Visual Identification & Conceptual Check</div>
+    <p style="font-size: 10pt; line-height: 1.8;">
+      1. What are the two types of seeds based on cotyledons? ________________ and ________________<br>
+      2. Name two crops grown during the winter season (Rabi): ________________ and ________________<br>
+      3. Draw a neat labeled sketch of a germinating seed showing <strong>Radicle (Root)</strong> and <strong>Plumule (Shoot)</strong> in the box below:
+    </p>
+    <div style="border: 1.5px dashed #444; height: 160px; width: 100%; border-radius: 6px; margin: 8px 0; display: flex; align-items: center; justify-content: center; font-size: 9pt; color: #666;">
+      [ Student Drawing Space: Seed Embryo Diagram ]
+    </div>
+
+    <div class="ws-section-title">SECTION C: NEP 2020 OMR Bubble Assessment</div>
+    <div style="display: flex; justify-content: space-between; margin: 10px 0;">
+      <div class="ws-omr-item">Q1: <span class="ws-bubble">A</span> <span class="ws-bubble">B</span> <span class="ws-bubble">C</span> <span class="ws-bubble">D</span></div>
+      <div class="ws-omr-item">Q2: <span class="ws-bubble">A</span> <span class="ws-bubble">B</span> <span class="ws-bubble">C</span> <span class="ws-bubble">D</span></div>
+      <div class="ws-omr-item">Q3: <span class="ws-bubble">A</span> <span class="ws-bubble">B</span> <span class="ws-bubble">C</span> <span class="ws-bubble">D</span></div>
+      <div class="ws-omr-item">Q4: <span class="ws-bubble">A</span> <span class="ws-bubble">B</span> <span class="ws-bubble">C</span> <span class="ws-bubble">D</span></div>
+      <div class="ws-omr-item">Q5: <span class="ws-bubble">A</span> <span class="ws-bubble">B</span> <span class="ws-bubble">C</span> <span class="ws-bubble">D</span></div>
+    </div>
+
+    <div class="ws-sign-row">
+      <div><strong>Teacher Remarks:</strong> _____________________________</div>
+      <div><strong>Teacher Signature:</strong> _____________________________</div>
+    </div>
+  `;
+
+  window.print();
+}
+
+/* =====================================================
+   23. BILINGUAL (HINDI + ENGLISH) TOGGLE
+   ===================================================== */
+function initBilingualMode() {
+  const langBtn = document.getElementById('langToggleBtn');
+  const langLabel = document.getElementById('langToggleLabel');
+
+  const savedLang = localStorage.getItem('lwe_bilingual') || 'en';
+  if (savedLang === 'hi') {
+    document.body.classList.add('bilingual-mode');
+    if (langLabel) langLabel.textContent = '🇮🇳 हिं (On)';
+  }
+
+  if (langBtn) {
+    langBtn.addEventListener('click', () => {
+      document.body.classList.toggle('bilingual-mode');
+      const isHi = document.body.classList.contains('bilingual-mode');
+      localStorage.setItem('lwe_bilingual', isHi ? 'hi' : 'en');
+      if (langLabel) langLabel.textContent = isHi ? '🇮🇳 हिं (On)' : '🇮🇳 EN/हिं';
+      triggerHaptic([40]);
+    });
+  }
+}
+
+/* =====================================================
+   24. INTERACTIVE SEED GERMINATION TIME SCRUBBER (CH 1)
+   ===================================================== */
+function initGerminationSimulator() {
+  const slider = document.getElementById('germSlider');
+  const dayLabel = document.getElementById('germDayLabel');
+  const infoBox = document.getElementById('germInfoBox');
+  const plantGroup = document.getElementById('germPlantGroup');
+  const playBtn = document.getElementById('germAutoPlayBtn');
+  if (!slider || !plantGroup) return;
+
+  const stages = {
+    1: {
+      title: 'Day 1: Dormant Seed',
+      desc: 'The dry bean seed rests quietly in dark soil. It absorbs moisture from water and warmth from soil.',
+      svg: `
+        <ellipse cx="300" cy="155" rx="14" ry="10" fill="#795548" stroke="#4e342e" stroke-width="2"/>
+        <circle cx="296" cy="153" r="2.5" fill="#d7ccc8"/>
+      `
+    },
+    3: {
+      title: 'Day 3: Seed Swells & Coat Cracks',
+      desc: 'The seed absorbs water, swells up to twice its size, and the outer protective coat (testa) softens and cracks open!',
+      svg: `
+        <ellipse cx="300" cy="155" rx="18" ry="13" fill="#8d6e63" stroke="#4e342e" stroke-width="2"/>
+        <path d="M294 148 Q 300 156 298 165" stroke="#ffffff" stroke-width="2" fill="none"/>
+        <path d="M300 162 Q 298 172 296 178" stroke="#f1f8e9" stroke-width="3" fill="none" stroke-linecap="round"/>
+      `
+    },
+    5: {
+      title: 'Day 5: Radicle (Baby Root) Grows Down',
+      desc: 'The baby root (radicle) emerges and grows downward into the soil to absorb moisture and anchor the plant.',
+      svg: `
+        <ellipse cx="300" cy="150" rx="18" ry="14" fill="#a1887f" stroke="#4e342e" stroke-width="2"/>
+        <path d="M300 160 Q 302 185 298 205" stroke="#e8f5e9" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M300 180 Q 288 190 282 195" stroke="#e8f5e9" stroke-width="2" fill="none"/>
+        <path d="M301 190 Q 312 200 318 206" stroke="#e8f5e9" stroke-width="2" fill="none"/>
+      `
+    },
+    7: {
+      title: 'Day 7: Plumule (Baby Shoot) Emerges Up',
+      desc: 'The green shoot (plumule) pushes upward towards the warm sunlight, arching through the soil line.',
+      svg: `
+        <!-- Deep Roots -->
+        <path d="M300 155 Q 302 190 298 215" stroke="#e8f5e9" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M300 175 Q 285 185 278 195" stroke="#e8f5e9" stroke-width="2.5" fill="none"/>
+        <path d="M300 190 Q 315 200 322 210" stroke="#e8f5e9" stroke-width="2.5" fill="none"/>
+        <!-- Rising Stem -->
+        <path d="M300 148 Q 295 125 300 110" stroke="#4caf50" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <!-- Emerging cotyledon hook -->
+        <ellipse cx="300" cy="110" rx="9" ry="7" fill="#8bc34a"/>
+      `
+    },
+    10: {
+      title: 'Day 10: Leaves Open & Seedling Grows!',
+      desc: 'The two green seed leaves (cotyledons) open wide, true leaves unfurl to catch sunlight, and photosynthesis begins!',
+      svg: `
+        <!-- Extensive Root Network -->
+        <path d="M300 150 Q 302 190 298 225" stroke="#e8f5e9" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M300 165 Q 280 180 270 195" stroke="#e8f5e9" stroke-width="3" fill="none"/>
+        <path d="M300 185 Q 320 200 332 215" stroke="#e8f5e9" stroke-width="3" fill="none"/>
+        <path d="M300 205 Q 285 215 278 222" stroke="#e8f5e9" stroke-width="2" fill="none"/>
+        <!-- Tall Green Stem -->
+        <path d="M300 150 Q 298 100 300 55" stroke="#2e7d32" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <!-- Opening Cotyledons -->
+        <ellipse cx="286" cy="85" rx="12" ry="7" fill="#8bc34a" transform="rotate(-20 286 85)"/>
+        <ellipse cx="314" cy="85" rx="12" ry="7" fill="#8bc34a" transform="rotate(20 314 85)"/>
+        <!-- First True Foliage Leaves -->
+        <path d="M300 55 Q 275 35 265 45 Q 285 62 300 55 Z" fill="#4caf50"/>
+        <path d="M300 55 Q 325 35 335 45 Q 315 62 300 55 Z" fill="#4caf50"/>
+        <circle cx="300" cy="52" r="3" fill="#81c784"/>
+      `
+    }
+  };
+
+  function updateStage(day) {
+    let closest = 1;
+    if (day >= 9) closest = 10;
+    else if (day >= 6) closest = 7;
+    else if (day >= 4) closest = 5;
+    else if (day >= 2) closest = 3;
+
+    const data = stages[closest];
+    dayLabel.textContent = `Day ${day}: ${data.title.split(': ')[1]}`;
+    infoBox.innerHTML = `<strong>Day ${day}:</strong> ${data.desc}`;
+    plantGroup.innerHTML = data.svg;
+    triggerHaptic([20]);
+  }
+
+  slider.addEventListener('input', (e) => {
+    updateStage(parseInt(e.target.value));
+  });
+
+  updateStage(1);
+
+  let playTimer = null;
+  if (playBtn) {
+    playBtn.addEventListener('click', () => {
+      if (playTimer) {
+        clearInterval(playTimer);
+        playTimer = null;
+        playBtn.textContent = '▶ Play Animation';
+        return;
+      }
+      playBtn.textContent = '⏸ Pause';
+      let d = 1;
+      slider.value = 1;
+      updateStage(1);
+      playTimer = setInterval(() => {
+        d++;
+        if (d > 10) {
+          clearInterval(playTimer);
+          playTimer = null;
+          playBtn.textContent = '▶ Replay Animation';
+          return;
+        }
+        slider.value = d;
+        updateStage(d);
+      }, 700);
+    });
+  }
+}
+
+/* =====================================================
+   25. INTERACTIVE STATES OF MATTER SANDBOX (CH 6)
+   ===================================================== */
+function initMatterSimulator() {
+  const canvas = document.getElementById('matterCanvas');
+  const infoBox = document.getElementById('matterInfoBox');
+  const label = document.getElementById('matterStateLabel');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let currentState = 'solid';
+  let particles = [];
+  const count = 48;
+
+  function initParticles() {
+    particles = [];
+    const w = canvas.width;
+    const h = canvas.height;
+
+    if (currentState === 'solid') {
+      const cols = 8;
+      const rows = 6;
+      const startX = (w - cols * 24) / 2;
+      const startY = (h - rows * 24) / 2 + 10;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          particles.push({
+            originX: startX + c * 24,
+            originY: startY + r * 24,
+            x: startX + c * 24,
+            y: startY + r * 24,
+            vx: 0,
+            vy: 0,
+            radius: 7,
+            color: '#74b9ff'
+          });
+        }
+      }
+    } else if (currentState === 'liquid') {
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: 100 + Math.random() * (w - 200),
+          y: h / 2 + Math.random() * (h / 2 - 20),
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: (Math.random() - 0.5) * 1.5,
+          radius: 7,
+          color: '#0984e3'
+        });
+      }
+    } else if (currentState === 'gas') {
+      for (let i = 0; i < 28; i++) {
+        particles.push({
+          x: 20 + Math.random() * (w - 40),
+          y: 20 + Math.random() * (h - 40),
+          vx: (Math.random() - 0.5) * 6,
+          vy: (Math.random() - 0.5) * 6,
+          radius: 7,
+          color: '#f39c12'
+        });
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const w = canvas.width;
+    const h = canvas.height;
+
+    particles.forEach(p => {
+      if (currentState === 'solid') {
+        p.x = p.originX + (Math.random() - 0.5) * 1.5;
+        p.y = p.originY + (Math.random() - 0.5) * 1.5;
+      } else if (currentState === 'liquid') {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 30 || p.x > w - 30) p.vx *= -1;
+        if (p.y < h / 2 || p.y > h - 15) p.vy *= -1;
+      } else if (currentState === 'gas') {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 15 || p.x > w - 15) p.vx *= -1;
+        if (p.y < 15 || p.y > h - 15) p.vy *= -1;
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  initParticles();
+  requestAnimationFrame(animate);
+
+  const btns = document.querySelectorAll('.matter-toggle-btn');
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentState = btn.getAttribute('data-state');
+      initParticles();
+      triggerHaptic([30]);
+
+      if (currentState === 'solid') {
+        label.textContent = 'State: Solid (Ice)';
+        label.style.color = '#74b9ff';
+        infoBox.innerHTML = '<strong>Solid State:</strong> Molecules are tightly packed in regular rows. They hold a fixed shape and vibrate gently in place.';
+      } else if (currentState === 'liquid') {
+        label.textContent = 'State: Liquid (Water)';
+        label.style.color = '#0984e3';
+        infoBox.innerHTML = '<strong>Liquid State:</strong> Molecules are close together but have enough energy to slide freely past one another, taking the shape of their container.';
+      } else if (currentState === 'gas') {
+        label.textContent = 'State: Gas (Water Vapour / Steam)';
+        label.style.color = '#f39c12';
+        infoBox.innerHTML = '<strong>Gas State:</strong> Molecules have enormous kinetic energy, bounce rapidly off all walls, and are spaced far apart!';
+      }
+    });
+  });
+}
+
+/* =====================================================
+   26. ISL SCIENCE GLOSSARY PAGE LOGIC
+   ===================================================== */
+function initISLGlossary() {
+  const grid = document.getElementById('glossaryGrid');
+  const searchInput = document.getElementById('glossarySearchInput');
+  const filterSelect = document.getElementById('glossaryUnitFilter');
+  if (!grid || typeof ISL_DATA === 'undefined') return;
+
+  function render(query = '', unit = 'all') {
+    grid.innerHTML = '';
+    const q = query.toLowerCase().trim();
+
+    const filtered = ISL_DATA.filter(item => {
+      const matchText = item.word.toLowerCase().includes(q) || item.meaning.toLowerCase().includes(q);
+      return matchText;
+    });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-secondary);">No matching scientific terms found. Try searching for "Seed", "Root", "Water", or "Plant"!</div>';
+      return;
+    }
+
+    filtered.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'isl-card';
+      card.setAttribute('data-isl', item.id);
+      card.innerHTML = `
+        <span class="isl-card__emoji">${item.emoji}</span>
+        <span class="isl-card__word">${item.word}</span>
+        <span class="isl-card__hint">🎥 View ISL Gesture Guide</span>
+      `;
+      card.addEventListener('click', () => {
+        const modal = document.getElementById('islModal');
+        const idx = ISL_DATA.findIndex(d => d.id === item.id);
+        if (modal && idx !== -1) {
+          document.getElementById('islModalWord').textContent = item.word;
+          document.getElementById('islModalEmoji').textContent = item.emoji;
+          document.getElementById('islGraphic').textContent = item.graphic || '🤟✨';
+          document.getElementById('islGestureName').textContent = item.gestureName;
+          document.getElementById('islModalStep1').textContent = item.step1;
+          document.getElementById('islModalStep2').textContent = item.step2;
+          document.getElementById('islModalMeaning').innerHTML = `<strong>Scientific Meaning:</strong> ${item.meaning}`;
+          document.getElementById('islCounter').textContent = `${idx + 1} / ${ISL_DATA.length}`;
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+          triggerHaptic([40]);
+        }
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  render();
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      render(e.target.value, filterSelect ? filterSelect.value : 'all');
+    });
+  }
+
+  if (filterSelect) {
+    filterSelect.addEventListener('change', (e) => {
+      render(searchInput ? searchInput.value : '', e.target.value);
+    });
+  }
+}
+
+/* =====================================================
+   27. CERTIFICATE OF SCIENCE EXCELLENCE MODAL
+   ===================================================== */
+function initCertificateModal() {
+  const certBtn = document.getElementById('certificateBtn');
+  const certModal = document.getElementById('certificateModal');
+  const closeBtn = document.getElementById('closeCertModalBtn');
+  const printBtn = document.getElementById('printCertBtn');
+  const nameDisplay = document.getElementById('certStudentName');
+  const dateDisplay = document.getElementById('certDateSpan');
+  const scoreDisplay = document.getElementById('certScoreBadge');
+
+  if (certBtn && certModal) {
+    certBtn.addEventListener('click', () => {
+      const student = getActiveStudent();
+      if (nameDisplay) nameDisplay.textContent = student.name;
+      if (dateDisplay) dateDisplay.textContent = new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
+
+      let completedCount = 0;
+      const allModules = ['ch1', 'ch2', 'ch3', 'ch4', 'ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'ch11', 'ch12', 'ch13', 'ch14', 'test1', 'test2'];
+      allModules.forEach(m => {
+        if (localStorage.getItem(`lwe_${student.id}_${m}_completed`) === 'true' || (student.id === 'student_1' && localStorage.getItem(`lwe_${m}_completed`) === 'true')) {
+          completedCount++;
+        }
+      });
+
+      if (scoreDisplay) {
+        scoreDisplay.textContent = `🌟 ${completedCount} / 16 Units & Tests Mastered 🌟`;
+      }
+
+      certModal.classList.add('active');
+      triggerHaptic([60, 40]);
+    });
+  }
+
+  if (closeBtn && certModal) {
+    closeBtn.addEventListener('click', () => certModal.classList.remove('active'));
+  }
+
+  if (printBtn) {
+    printBtn.addEventListener('click', () => window.print());
+  }
+}

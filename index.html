@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Visual Learning Platform for Deaf Students — Class 5 EVS Science. Learn through pictures, animations, and sign language.">
   <title>🌱 Learn with Eyes — Class 5 Science</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌱</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,8 +18,20 @@
       <span>Learn with Eyes</span>
     </div>
     <nav class="header__nav">
+      <button class="header__ctrl-btn header__profile-btn" id="studentProfileBtn" title="Switch or Add Student Profile" aria-label="Student Profile">
+        <span>👤</span> <span id="currentStudentName">Student 1</span>
+      </button>
+      <button class="header__ctrl-btn header__teacher-btn" id="teacherModeBtn" title="Toggle Teacher Smartboard & Projector Mode" aria-label="Teacher Mode">
+        <span>🧑‍🏫</span> <span class="btn-text-desktop">Teacher Mode</span>
+      </button>
+      <button class="header__ctrl-btn header__lang-btn" id="langToggleBtn" title="Switch Bilingual English/Hindi (द्विभाषी)" aria-label="Toggle Language">
+        <span id="langToggleLabel">🇮🇳 EN/हिं</span>
+      </button>
+      <button class="header__ctrl-btn header__cert-btn" id="certificateBtn" title="View & Print Science Excellence Certificate" aria-label="Certificate of Excellence">
+        <span>🎓</span>
+      </button>
       <a href="science-5-full.pdf" download="Innovators_Science_5_Full_Book.pdf" class="header__pdf-btn" id="headerPdfBtn" title="Download official full 120-page Class 5 Science textbook PDF">
-        <span class="badge">120 Pages</span> 📖 Textbook PDF
+        <span class="badge">120P</span> 📖 PDF
       </a>
       <button class="header__ctrl-btn" id="fontSizeBtn" title="Change text size (Normal / Large / Extra Large)" aria-label="Toggle text size">
         <span id="fontSizeLabel">A⁺</span>
@@ -32,10 +45,18 @@
 
   <!-- ==================== SIDEBAR ==================== -->
   <aside class="sidebar" id="sidebar">
-    <div class="sidebar__unit-title">🏠 Home</div>
+    <div class="sidebar__unit-title">🏠 Home & Tools</div>
     <a href="#" class="sidebar__link active" data-page="home" id="nav-home">
       <span class="sidebar__link-icon">🏡</span>
       <span class="sidebar__link-text">All Units (1-14)</span>
+    </a>
+    <a href="#" class="sidebar__link" data-page="dashboard" id="nav-dashboard">
+      <span class="sidebar__link-icon">📊</span>
+      <span class="sidebar__link-text">Class Dashboard</span>
+    </a>
+    <a href="#" class="sidebar__link" data-page="glossary" id="nav-glossary">
+      <span class="sidebar__link-icon">📖</span>
+      <span class="sidebar__link-text">ISL Science Dictionary</span>
     </a>
 
     <div class="sidebar__unit-title">Unit I — Living Things</div>
@@ -134,6 +155,76 @@
     <!-- =====================================================
          PAGE: HOME (ALL UNITS & CHAPTERS)
          ===================================================== -->
+    
+    <!-- =====================================================
+         PAGE: CLASS PROGRESS DASHBOARD (TEACHER & STUDENT ROSTER)
+         ===================================================== -->
+    <div class="content page" id="page-dashboard" style="display: none;">
+      <div class="home-hero" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: #fff;">
+        <span class="home-hero__emoji">📊🧑‍🏫</span>
+        <h1 class="home-hero__title" style="color: #fff;">Class Progress & Teacher Roster</h1>
+        <p class="home-hero__subtitle" style="color: #e0e7ff;">Anushruti Academy for the Deaf (IIT Roorkee) • Multi-Student Assessment Ledger</p>
+      </div>
+
+      <div class="lesson-card fade-in">
+        <div class="sim-header">
+          <div class="sim-title">
+            <span>👥 Enrolled Students & Progress</span>
+            <span class="sim-badge" id="rosterCountBadge">0 Students</span>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn btn--sm btn--primary" id="addNewStudentBtn">➕ Add Student</button>
+            <button class="btn btn--sm btn--secondary" id="exportCsvBtn">📥 Export Report (CSV)</button>
+            <button class="btn btn--sm btn--danger" id="resetCurrentStudentBtn" style="background: #e74c3c; color: #fff;">🔄 Reset Current</button>
+          </div>
+        </div>
+
+        <div style="overflow-x: auto; margin-top: 16px;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+            <thead>
+              <tr style="background: var(--bg-section-alt); border-bottom: 2px solid var(--color-primary);">
+                <th style="padding: 10px 14px;">Student Name</th>
+                <th style="padding: 10px 14px;">Chapters Done</th>
+                <th style="padding: 10px 14px;">Total Stars</th>
+                <th style="padding: 10px 14px;">Model Test 1</th>
+                <th style="padding: 10px 14px;">Model Test 2</th>
+                <th style="padding: 10px 14px; text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="rosterTableBody">
+              <!-- Rendered dynamically by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         PAGE: ISL SCIENCE DICTIONARY & GLOSSARY
+         ===================================================== -->
+    <div class="content page" id="page-glossary" style="display: none;">
+      <div class="home-hero" style="background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); color: #fff;">
+        <span class="home-hero__emoji">📖🤟</span>
+        <h1 class="home-hero__title" style="color: #fff;">ISL Science Dictionary</h1>
+        <p class="home-hero__subtitle" style="color: #e0e7ff;">Visual Glossary with Indian Sign Language Gestures & Bilingual Definitions</p>
+      </div>
+
+      <div class="glossary-search-bar">
+        <input type="text" id="glossarySearchInput" class="glossary-search-input" placeholder="🔍 Search scientific term (e.g. Seed, Photosynthesis, Magnet, Friction, Bone)..." aria-label="Search ISL Terms">
+        <select id="glossaryUnitFilter" class="btn btn--secondary" style="border-radius: 30px; padding: 0 16px;">
+          <option value="all">🌟 All Units (Chapters 1-14)</option>
+          <option value="unit1">🌿 Unit I: Living Things</option>
+          <option value="unit2">⚡ Unit II: Materials & Energy</option>
+          <option value="unit3">🌍 Unit III: Earth & Environment</option>
+          <option value="unit4">🩹 Unit IV: Safety Rules</option>
+        </select>
+      </div>
+
+      <div class="isl-grid" id="glossaryGrid">
+        <!-- Rendered dynamically by JS with complete search -->
+      </div>
+    </div>
+
     <div class="content page" id="page-home">
       <div class="home-hero">
         <span class="home-hero__emoji">👁️✨📖</span>
@@ -415,6 +506,20 @@
     <div class="content page" id="page-ch1" style="display: none;">
 
       <!-- Chapter Hero -->
+      <!-- Teacher Smartboard Toolbar -->
+      <div class="teacher-toolbar">
+        <div class="teacher-toolbar__badge">
+          <span>🧑‍🏫</span> <span>Teacher Smartboard Controls • Chapter 1: Growing Plants</span>
+        </div>
+        <div class="teacher-toolbar__actions">
+          <button class="btn btn--sm btn--secondary toggle-answers-btn" title="Hide or show answers for class quiz">👁️ Hide/Show Answers</button>
+          <button class="btn btn--sm btn--primary print-worksheet-btn" data-ch="ch1" title="Print classroom worksheet">🖨️ Print Student Worksheet</button>
+        </div>
+      </div>
+      <div class="teacher-pedagogy-tip">
+        <strong>💡 Deaf Pedagogy Guidance:</strong> Bring 2 soaked bean seeds and 1 dry seed to class. Allow deaf students to feel the softened seed coat with their fingers, split the two cotyledons, and observe the baby root and shoot with a magnifying lens. Use the interactive time scrubber above on your smartboard!
+      </div>
+      
       <div class="chapter-hero">
         <img src="images/plant_hero.png" alt="Growing Plants — colorful illustration of plants, seeds, and nature" class="chapter-hero__img">
         <div class="chapter-hero__overlay">
@@ -872,6 +977,44 @@
 
       <!-- ===== SECTION: Activities ===== -->
       <div class="lesson-section" id="section-activities">
+
+        <!-- Interactive Seed Germination Timeline Simulator -->
+        <div class="sim-container fade-in">
+          <div class="sim-header">
+            <div class="sim-title">
+              <span>🌱 Interactive Seed Germination Time Scrubber</span>
+              <span class="sim-badge">Visual Lab</span>
+            </div>
+            <span style="font-weight: 700; color: var(--color-primary-dark);" id="germDayLabel">Day 1: Dormant Seed</span>
+          </div>
+
+          <div class="germination-canvas-wrap" id="germCanvasWrap">
+            <svg id="germSvg" viewBox="0 0 600 240" width="100%" height="100%">
+              <!-- Ground & Soil Background -->
+              <rect x="0" y="0" width="600" height="130" fill="#aed581" opacity="0.4"/>
+              <rect x="0" y="130" width="600" height="110" fill="#6d4c41"/>
+              <line x1="0" y1="130" x2="600" y2="130" stroke="#4e342e" stroke-width="3"/>
+              
+              <!-- Sun Rays -->
+              <circle cx="530" cy="40" r="26" fill="#fbc02d"/>
+              <circle cx="530" cy="40" r="32" fill="#fff59d" opacity="0.4"/>
+              
+              <!-- Dynamic Plant Elements rendered by JS -->
+              <g id="germPlantGroup"></g>
+            </svg>
+          </div>
+
+          <div class="germination-controls">
+            <label for="germSlider" style="font-weight: 800; font-size: 0.95rem;">Drag Timeline:</label>
+            <input type="range" min="1" max="10" value="1" id="germSlider" class="sim-slider" aria-label="Germination Day">
+            <button class="btn btn--sm btn--primary" id="germAutoPlayBtn">▶ Play Animation</button>
+          </div>
+
+          <div class="sim-info-box" id="germInfoBox">
+            <strong>Day 1:</strong> A dry bean seed lies in dark soil. It absorbs moisture and warmth from its environment.
+          </div>
+        </div>
+
         <div class="lesson-card lesson-card--orange">
           <div class="lesson-card__header">
             <div class="lesson-card__icon">🎮</div>
@@ -3327,6 +3470,45 @@
          PAGE: CHAPTER CH6 — SOLIDS, LIQUIDS AND GASES
          ===================================================== -->
     <div class="content page" id="page-ch6" style="display: none;">
+      <!-- Teacher Smartboard Toolbar -->
+      <div class="teacher-toolbar">
+        <div class="teacher-toolbar__badge">
+          <span>🧑‍🏫</span> <span>Teacher Smartboard Controls • Chapter 6: States of Matter</span>
+        </div>
+        <div class="teacher-toolbar__actions">
+          <button class="btn btn--sm btn--secondary toggle-answers-btn">👁️ Hide/Show Answers</button>
+          <button class="btn btn--sm btn--primary print-worksheet-btn" data-ch="ch6">🖨️ Print Student Worksheet</button>
+        </div>
+      </div>
+      <div class="teacher-pedagogy-tip">
+        <strong>💡 Deaf Pedagogy Guidance:</strong> Kinesthetic demonstration: Have the deaf students stand shoulder-to-shoulder touching arms to represent "Solid", step slightly apart walking smoothly past each other for "Liquid", and spread wide across the classroom waving arms for "Gas"!
+      </div>
+      
+        <!-- Interactive States of Matter Particle Sandbox -->
+        <div class="sim-container fade-in">
+          <div class="sim-header">
+            <div class="sim-title">
+              <span>🧪 Interactive Particle Motion Sandbox (States of Matter)</span>
+              <span class="sim-badge">Physics Lab</span>
+            </div>
+            <span style="font-weight: 700; color: #3498db;" id="matterStateLabel">State: Solid (Ice)</span>
+          </div>
+
+          <div class="matter-canvas-wrap">
+            <canvas id="matterCanvas" width="560" height="210" style="width: 100%; height: 100%; display: block; border-radius: 8px;"></canvas>
+          </div>
+
+          <div class="matter-toggle-group">
+            <button class="matter-toggle-btn active" data-state="solid" id="btnStateSolid">🧊 Solid (Tightly Packed)</button>
+            <button class="matter-toggle-btn" data-state="liquid" id="btnStateLiquid">💧 Liquid (Close but Free)</button>
+            <button class="matter-toggle-btn" data-state="gas" id="btnStateGas">💨 Gas (Far & Fast)</button>
+          </div>
+
+          <div class="sim-info-box" id="matterInfoBox">
+            <strong>Solid State:</strong> Particles are arranged in an orderly fixed grid. They cannot move freely and only vibrate in place. This gives solids a definite shape and volume!
+          </div>
+        </div>
+
       <div class="chapter-hero chapter-hero--gradient" style="background: linear-gradient(135deg, #117a65 0%, #16a085 50%, #48c9b0 100%);">
         <div class="chapter-hero__overlay">
           <div class="chapter-hero__unit-label">Unit II — Materials and Energy • Chapter 6 (Page 46)</div>
@@ -7049,6 +7231,72 @@
 
   <!-- Confetti Container -->
   <div class="confetti-container" id="confettiContainer"></div>
+
+  <!-- ==================== STUDENT PROFILE MODAL ==================== -->
+  <div class="modal-overlay" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-title-emoji">👤</span>
+          <h2 class="modal-title" id="profileModalTitle">Student Profiles</h2>
+        </div>
+        <button class="modal-close-btn" id="closeProfileModal" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-secondary); margin-bottom: 14px; font-size: 0.95rem;">
+          Select a student profile to load individual scores, stars, and quiz history, or add a new learner profile:
+        </p>
+        <div id="studentListContainer" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-top: 12px; border-top: 1px solid #e2e8f0; padding-top: 14px;">
+          <input type="text" id="newStudentNameInput" placeholder="Enter student name (e.g. Aarav, Priya)..." class="glossary-search-input" style="padding: 8px 14px; min-width: 0;" aria-label="New Student Name">
+          <button class="btn btn--primary btn--sm" id="createStudentBtn">➕ Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CERTIFICATE OF EXCELLENCE MODAL ==================== -->
+  <div class="modal-overlay" id="certificateModal" role="dialog" aria-modal="true" aria-labelledby="certModalTitle">
+    <div class="modal-card cert-modal-card" id="certPrintArea">
+      <div class="cert-header-seal">🏅🌱📜</div>
+      <h2 class="cert-org-title">Anushruti Academy for the Deaf</h2>
+      <p class="cert-sub-title">Indian Institute of Technology (IIT) Roorkee Campus</p>
+      <div class="cert-award-line">Certificate of Science Excellence</div>
+      <div class="cert-student-name" id="certStudentName">Aarav Sharma</div>
+      <p class="cert-desc" id="certDescText">
+        Has demonstrated outstanding dedication, visual mastery, and scientific curiosity across the <strong>Class 5 Science Curriculum (Innovators' Science 5 / NEP 2020)</strong>.
+      </p>
+      <div style="font-weight: 800; color: #2e7d32; font-size: 1.1rem; margin-bottom: 12px;" id="certScoreBadge">
+        🌟 14 Chapters Mastered • Model Assessment Passed 🌟
+      </div>
+      <div class="cert-footer-row">
+        <div class="cert-sign-col">
+          <div class="cert-sign-line"></div>
+          <strong style="font-size: 0.85rem;">Date of Award</strong><br>
+          <span style="font-size: 0.8rem;" id="certDateSpan">Today</span>
+        </div>
+        <div style="font-size: 2rem;">🏛️ IITR 🏛️</div>
+        <div class="cert-sign-col">
+          <div class="cert-sign-line"></div>
+          <strong style="font-size: 0.85rem;">Head of Institution</strong><br>
+          <span style="font-size: 0.8rem;">Anushruti Academy</span>
+        </div>
+      </div>
+      <div style="margin-top: 24px; display: flex; justify-content: center; gap: 12px;" class="no-print">
+        <button class="btn btn--primary" id="printCertBtn">🖨️ Print Certificate</button>
+        <button class="btn btn--secondary" id="closeCertModalBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PRINTABLE WORKSHEET CONTAINER ==================== -->
+  <div class="printable-worksheet" id="printableWorksheet">
+    <!-- Populated dynamically on print click -->
+  </div>
+
 
   <!-- ==================== FOOTER ==================== -->
   <footer class="footer">
