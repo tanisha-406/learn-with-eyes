@@ -76,8 +76,8 @@
   --transition-slow: 0.5s ease;
 
   /* Layout */
-  --sidebar-width: 280px;
-  --content-max-width: 900px;
+  --sidebar-width: 320px;
+  --content-max-width: 960px;
   --header-height: 70px;
 }
 
@@ -316,8 +316,8 @@ button {
 .sidebar__link {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
-  padding: var(--space-md) var(--space-lg);
+  gap: 12px;
+  padding: 10px 16px;
   font-size: var(--font-size-base);
   font-weight: 600;
   color: var(--text-secondary);
@@ -347,9 +347,10 @@ button {
 }
 
 .sidebar__link-text {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.25;
+  font-size: 0.95rem;
+  flex: 1;
 }
 
 .sidebar__progress {
@@ -1427,6 +1428,21 @@ button {
 /* ===========================
    RESPONSIVE
    =========================== */
+@media (max-width: 1250px) {
+  .btn-text-desktop {
+    display: none;
+  }
+  .header__pdf-btn span.badge {
+    display: none;
+  }
+  .header__logo span:not(.header__logo-icon) {
+    font-size: 1.15rem;
+  }
+  .header__nav {
+    gap: 6px;
+  }
+}
+
 @media (max-width: 1024px) {
   .sidebar {
     transform: translateX(-100%);
